@@ -1,0 +1,35 @@
+name: "@simatic-ax/statemachine"
+version: 0.0.1
+author: Siemens AG
+type: lib
+variables:
+  APAX_BUILD_ARGS:
+    - '--log Trace'
+    - '--simulation'
+    - '--debug'
+targets:
+  - '1500'
+  - 'axunit-llvm'
+scripts:
+  publishlib:
+    - apax publish --package *.apax.tgz --registry 'https://npm.pkg.github.com/'
+    - rm *.apax.tgz -f
+  createpackage:
+    - apax build
+    - apax test
+    - apax version $1
+    - apax pack
+    # - apax publishlib
+devDependencies:
+  '@ax/sdk': 1.0.127
+dependencies:
+  "@ax/system-timer": 1.0.12
+  "@simatic-ax/snippetscollection": 0.0.3
+registries:
+  '@simatic-ax': 'https://npm.pkg.github.com/'
+files:
+  - 'README.md'
+  - 'LICENSE.md'
+  - 'doc'
+  - 'src' # ship library with source
+  # - 'bin/1500/'   # ship library with binary

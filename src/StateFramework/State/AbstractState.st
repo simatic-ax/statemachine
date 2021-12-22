@@ -1,0 +1,48 @@
+USING Simatic.Ax.Stateframework;
+
+NAMESPACE Simatic.Ax.StateFramework
+    CLASS ABSTRACT AbstractState IMPLEMENTS IState
+
+        VAR PUBLIC
+            transition1 : ITransition;
+            StateID : INT;
+            StateName : String;
+        END_VAR
+
+        METHOD PUBLIC ABSTRACT OnEntry
+        END_METHOD
+
+        METHOD PUBLIC ABSTRACT OnExit
+        END_METHOD
+
+        METHOD PUBLIC ABSTRACT Action
+        END_METHOD
+
+        METHOD PUBLIC GetTransition : ITransition
+            VAR_INPUT 
+                pos : UINT;
+            END_VAR
+            IF (THIS.TransitionCount() = pos + UINT#1) THEN
+                GetTransition := transition1;
+            ELSE
+                GetTransition := NULL;
+            END_IF;
+        END_METHOD
+
+        METHOD PUBLIC TransitionCount : UINT
+            IF (transition1 <> NULL) THEN
+                TransitionCount := UINT#1;
+            ELSE
+                TransitionCount := UINT#0;
+            END_IF;
+        END_METHOD
+
+        METHOD PUBLIC GetStateID : INT
+            GetStateID := StateID;
+        END_METHOD
+    
+        METHOD PUBLIC GetStateName : STRING
+            GetStateName := StateName;
+        END_METHOD
+    END_CLASS
+END_NAMESPACE
