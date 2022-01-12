@@ -17,6 +17,7 @@ Simatic.Ax.StateFramework
 ## Guards
 
 ### Class diagram
+![](./doc/guard.png)
 
 ```mermaid
 classDiagram
@@ -37,6 +38,7 @@ classDiagram
 * [AndGuard](#AndGuard)
 * [BoolGuard](#BoolGuard)
 * [CompareGuardLint](#CompareGuardLint)
+* [CountGuard](#CountGuard)
 * [OrGuard](#OrGuard)
 * [TrueGuard](#TrueGuard)
 * [XorGuard](#XorGuard)
@@ -104,7 +106,24 @@ PROGRAM SampleProgram
 END_PROGRAM
 ```
 
+### CountGuard
 
+The count guard increments in every cycle the count value. When the value count has reached the value of the parameter `count`, the guard returns `TRUE`.
+
+Usage:
+```iecst
+USING Simatic.Ax.StateFramework;
+
+PROGRAM SampleProgram
+    VAR
+        value : LINT;
+        guard1 : CountGuard := (count := LINT#5);
+    END_VAR
+
+    // OR 
+    guard1.Config(countValue := LINT#5);
+END_PROGRAM
+```
 
 ### OrGuard
 
