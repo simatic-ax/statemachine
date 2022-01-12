@@ -19,7 +19,7 @@ Simatic.Ax.StateFramework
 ### Class diagram
 ![](./doc/guard.png)
 
-```mermaid
+<!-- ```mermaid
 classDiagram
     class IGuard {
         <<interface>>
@@ -31,7 +31,7 @@ classDiagram
         + <ClassInterface>
     }
     IGuard <|-- ConcreteGuard : implements
-```
+``` -->
 
 ### Available guards
 
