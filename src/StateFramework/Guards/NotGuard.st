@@ -1,15 +1,15 @@
 NAMESPACE Simatic.Ax.StateFramework    
     CLASS NotGuard IMPLEMENTS IGuard
         VAR PUBLIC
-            lhs : IGuard;
+            Guard : IGuard;
         END_VAR
         
         METHOD PUBLIC Check : BOOL
-            Check := NOT(lhs.Check());
+            Check := NOT(Guard.Check());
         END_METHOD
 
         METHOD PUBLIC Reset
-            lhs.Reset();
+            Guard.Reset();
         END_METHOD
 
     END_CLASS

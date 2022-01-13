@@ -6,31 +6,31 @@ NAMESPACE Simatic.Ax.StateFramework
 
     CLASS CompareGuardLint IMPLEMENTS IGuard
         VAR PUBLIC
-            _value : REF_TO LINT;
-            _compareToValue : LINT;
-            _condition : Condition;
+            Value : REF_TO LINT;
+            CompareToValue : LINT;
+            Condition : Condition;
         END_VAR
         
         METHOD PUBLIC Config
             VAR_INPUT
-                value : REF_TO LINT;
-                compareToValue : LINT;
-                condition : Condition;                
+                countValue : REF_TO LINT;
+                compareValue : LINT;
+                compareCondition : Condition;                
             END_VAR
-            _value := value;
-            _compareToValue := compareToValue;
-            _condition := condition;
+            Value := countValue;
+            CompareToValue := compareValue;
+            Condition := compareCondition;
         END_METHOD
         
         // ---------------- IMPLEMENT IGuard---------------------------
         METHOD PUBLIC Check : BOOL
 
-            CASE _condition OF
-                Condition#GT : Check := _value^ > _compareToValue;
-                Condition#EQ : Check := _value^ = _compareToValue;
-                Condition#LT : Check := _value^ < _compareToValue;
-                Condition#GE : Check := _value^ >= _compareToValue;
-                Condition#LE : Check := _value^ <= _compareToValue;
+            CASE Condition OF
+                Condition#GT : Check := Value^ > CompareToValue;
+                Condition#EQ : Check := Value^ = CompareToValue;
+                Condition#LT : Check := Value^ < CompareToValue;
+                Condition#GE : Check := Value^ >= CompareToValue;
+                Condition#LE : Check := Value^ <= CompareToValue;
             END_CASE
             ;
 

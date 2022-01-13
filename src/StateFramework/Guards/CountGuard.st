@@ -2,7 +2,7 @@ NAMESPACE Simatic.Ax.StateFramework
 
     CLASS CountGuard IMPLEMENTS IGuard
         VAR PUBLIC
-            count : LINT;
+            Count : LINT;
         END_VAR
         VAR
             _actCount : LINT;
@@ -12,13 +12,13 @@ NAMESPACE Simatic.Ax.StateFramework
             VAR_INPUT
                 countValue : LINT;
             END_VAR
-            count := countValue;
+            Count := countValue;
         END_METHOD
 
         // ---------------- IMPLEMENT IGuard---------------------------
         METHOD PUBLIC Check : BOOL
             _actCount := _actCount + LINT#1;
-            IF (_actCount >= count) THEN                
+            IF (_actCount >= Count) THEN                
                 _actCount := LINT#0;
                 Check := TRUE;
             ELSE

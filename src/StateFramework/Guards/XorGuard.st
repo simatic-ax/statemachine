@@ -1,17 +1,17 @@
 NAMESPACE Simatic.Ax.StateFramework    
     CLASS XorGuard IMPLEMENTS IGuard
         VAR PUBLIC
-            lhs : IGuard;
-            rhs : IGuard;
+            Lhs : IGuard;
+            Rhs : IGuard;
         END_VAR
         
         METHOD PUBLIC Check : BOOL
-            Check := lhs.Check() XOR rhs.Check();
+            Check := Lhs.Check() XOR Rhs.Check();
         END_METHOD
 
         METHOD PUBLIC Reset
-            lhs.Reset();
-            rhs.Reset();
+            Lhs.Reset();
+            Rhs.Reset();
         END_METHOD
 
     END_CLASS

@@ -47,7 +47,7 @@ Simatic.Ax.StateFramework
 
 ### AndGuard
 
-The `AndGuard` is a guard, that returns `TRUE`, if both conditions (lhs `AND` rhs) are `TRUE`.
+The `AndGuard` is a guard, that returns `TRUE`, if both conditions (Lhs `AND` Rhs) are `TRUE`.
 
 Usage:
 ```iecst
@@ -55,9 +55,9 @@ USING Simatic.Ax.StateFramework;
 
 PROGRAM SampleProgram
     VAR
-        guard1 : AndGuard := (lhs := timeoutGuard1, rhs := countGuard1);
-        timeoutGuard1 : TimeoutGuard := (timeout := T#1500ms);
-        countGuard1 : CountGuard := (count := LINT#5);
+        guard1 : AndGuard := (Lhs := timeoutGuard1, Rhs := countGuard1);
+        timeoutGuard1 : TimeoutGuard := (Timeout := T#1500ms);
+        countGuard1 : CountGuard := (Count := LINT#5);
     END_VAR
 END_PROGRAM
 ```
@@ -75,7 +75,7 @@ USING Simatic.Ax.StateFramework;
 PROGRAM SampleProgram
     VAR
         bValue : BOOL;
-        guard1 : BoolGuard := (value := REF(bValue));
+        guard1 : BoolGuard := (Value := REF(bValue));
     END_VAR
 END_PROGRAM
 ```
@@ -101,7 +101,7 @@ USING Simatic.Ax.StateFramework;
 PROGRAM SampleProgram
     VAR
         value : LINT;
-        guard1 : CompareGuardLint := (_value := REF(value), _compareToValue := LINT#500, _condition := Condition#GT);
+        guard1 : CompareGuardLint := (Value := REF(value), CompareToValue := LINT#500, Condition := Condition#GT);
     END_VAR
 END_PROGRAM
 ```
@@ -117,7 +117,7 @@ USING Simatic.Ax.StateFramework;
 PROGRAM SampleProgram
     VAR
         value : LINT;
-        guard1 : CountGuard := (count := LINT#5);
+        guard1 : CountGuard := (Count := LINT#5);
     END_VAR
 
     // OR 
@@ -127,7 +127,7 @@ END_PROGRAM
 
 ### OrGuard
 
-The `OrGuard` is a guard, that returns `TRUE`, if at minimum one of both conditions (lhs `OR` rhs) are `TRUE`.
+The `OrGuard` is a guard, that returns `TRUE`, if at minimum one of both conditions (Lhs `OR` Rhs) are `TRUE`.
 
 Usage:
 ```iecst
@@ -135,9 +135,9 @@ USING Simatic.Ax.StateFramework;
 
 PROGRAM SampleProgram
     VAR
-        guard1 : OrGuard := (lhs := timeoutGuard1, rhs := countGuard1);
-        timeoutGuard1 : TimeoutGuard := (timeout := T#1500ms);
-        countGuard1 : CountGuard := (count := LINT#5);
+        guard1 : OrGuard := (Lhs := timeoutGuard1, Rhs := countGuard1);
+        timeoutGuard1 : TimeoutGuard := (Timeout := T#1500ms);
+        countGuard1 : CountGuard := (Count := LINT#5);
     END_VAR
 END_PROGRAM
 ```
@@ -161,7 +161,7 @@ END_PROGRAM
 
 ### XorGuard
 
-The `XorGuard` is a guard, that returns `TRUE`, if exactly one condition (lhs `XOR` rhs) is `TRUE`.
+The `XorGuard` is a guard, that returns `TRUE`, if exactly one condition (Lhs `XOR` Rhs) is `TRUE`.
 
 Usage:
 ```iecst
@@ -169,9 +169,9 @@ USING Simatic.Ax.StateFramework;
 
 PROGRAM SampleProgram
     VAR
-        guard1 : XorGuard := (lhs := timeoutGuard1, rhs := countGuard1);
-        timeoutGuard1 : TimeoutGuard := (timeout := T#1500ms);
-        countGuard1 : CountGuard := (count := LINT#5);
+        guard1 : XorGuard := (Lhs := timeoutGuard1, Rhs := countGuard1);
+        timeoutGuard1 : TimeoutGuard := (Timeout := T#1500ms);
+        countGuard1 : CountGuard := (Count := LINT#5);
     END_VAR
 END_PROGRAM
 ```

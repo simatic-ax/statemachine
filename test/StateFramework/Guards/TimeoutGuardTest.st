@@ -34,7 +34,7 @@ NAMESPACE Simatic.Ax.StateFramework.Test
         {Test}
         METHOD PUBLIC TestConfig
             _guard.Config(T#5s);
-            Equal(actual := _guard.timeout, expected := T#5s);
+            Equal(actual := _guard.Timeout, expected := T#5s);
         END_METHOD
 
     END_CLASS   

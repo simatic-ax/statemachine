@@ -4,7 +4,7 @@ NAMESPACE Simatic.Ax.StateFramework
 
     CLASS TimeoutGuard IMPLEMENTS IGuard
         VAR PUBLIC
-            timeout : TIME;
+            Timeout : TIME;
         END_VAR
         VAR
             _ton : OnDelay;
@@ -14,12 +14,12 @@ NAMESPACE Simatic.Ax.StateFramework
             VAR_INPUT
                 timeoutValue : TIME;
             END_VAR
-            timeout := timeoutValue;
+            Timeout := timeoutValue;
         END_METHOD
 
         // ---------------- IMPLEMENT IGuard---------------------------
         METHOD PUBLIC Check : BOOL
-            _ton(signal := TRUE, duration := timeout);
+            _ton(signal := TRUE, duration := Timeout);
             IF (_ton.output) THEN
                  Check := TRUE;
             ELSE

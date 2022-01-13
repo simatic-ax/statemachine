@@ -57,7 +57,7 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
         // END_METHOD
 
         METHOD SetupStatemachine        
-            g1.value := REF(b);
+            g1.Value := REF(b);
             t1.Guard := g1;
             is.Transition1 := t1;
             t1.NextState := ns;

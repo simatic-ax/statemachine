@@ -1,11 +1,11 @@
 NAMESPACE Simatic.Ax.StateFramework    
     CLASS BoolGuard IMPLEMENTS IGuard
         VAR PUBLIC
-            value : REF_TO BOOL;
+            Value : REF_TO BOOL;
         END_VAR
         
         METHOD PUBLIC Check : BOOL
-            Check := value^;
+            Check := Value^;
         END_METHOD
 
         METHOD PUBLIC Reset

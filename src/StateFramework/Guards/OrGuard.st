@@ -1,17 +1,17 @@
 NAMESPACE Simatic.Ax.StateFramework    
     CLASS OrGuard IMPLEMENTS IGuard
         VAR PUBLIC
-            lhs : IGuard;
-            rhs : IGuard;
+            Lhs : IGuard;
+            Rhs : IGuard;
         END_VAR
         
         METHOD PUBLIC Check : BOOL
-            Check := lhs.Check() OR rhs.Check();
+            Check := Lhs.Check() OR Rhs.Check();
         END_METHOD
 
         METHOD PUBLIC Reset
-            lhs.Reset();
-            rhs.Reset();
+            Lhs.Reset();
+            Rhs.Reset();
         END_METHOD
 
     END_CLASS

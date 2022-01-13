@@ -12,7 +12,7 @@ NAMESPACE Simatic.Ax.StateFramework.Test
 
         {Test}
         METHOD PUBLIC TestCheck_Two_Times_Expect_TRUE
-            _guard.count := 2;
+            _guard.Count := 2;
             Equal(actual := _guard.Check(), expected := FALSE);
             Equal(actual := _guard.Check(), expected := TRUE);
             Equal(actual := _guard.Check(), expected := FALSE);
@@ -20,7 +20,7 @@ NAMESPACE Simatic.Ax.StateFramework.Test
 
         {Test}
         METHOD PUBLIC TestCheck_Two_Times_With_Reset_Expect_TRUE
-            _guard.count := 2;
+            _guard.Count := 2;
             Equal(actual := _guard.Check(), expected := FALSE);
             _guard.Reset();
             Equal(actual := _guard.Check(), expected := TRUE);
@@ -55,7 +55,7 @@ NAMESPACE Simatic.Ax.StateFramework.Test
 
         {Test}
         METHOD PUBLIC BoolGuard_ExpectFalse_WhenValueFalse
-            _guard.value := REF(_value);
+            _guard.Value := REF(_value);
             _value := FALSE;
             Equal(actual := _guard.Check(), expected := FALSE);
             _guard.Reset();
@@ -64,7 +64,7 @@ NAMESPACE Simatic.Ax.StateFramework.Test
 
         {Test}
         METHOD PUBLIC BoolGuard_ExpectTrue_WhenValueTrue
-            _guard.value := REF(_value);
+            _guard.Value := REF(_value);
             _value := TRUE;
             Equal(actual := _guard.Check(), expected := TRUE);
             _guard.Reset();
@@ -98,10 +98,10 @@ NAMESPACE Simatic.Ax.StateFramework.Test
             _b2 := b2;
             _q := q;
 
-            _bg1.value := REF(_b1);
-            _bg2.value := REF(_b2);
-            _guard.lhs := _bg1;
-            _guard.rhs := _bg2;
+            _bg1.Value := REF(_b1);
+            _bg2.Value := REF(_b2);
+            _guard.Lhs := _bg1;
+            _guard.Rhs := _bg2;
             
 
             Equal(actual := _guard.Check(), expected := _q);
@@ -138,10 +138,10 @@ NAMESPACE Simatic.Ax.StateFramework.Test
             _b2 := b2;
             _q := q;
 
-            _bg1.value := REF(_b1);
-            _bg2.value := REF(_b2);
-            _guard.lhs := _bg1;
-            _guard.rhs := _bg2;
+            _bg1.Value := REF(_b1);
+            _bg2.Value := REF(_b2);
+            _guard.Lhs := _bg1;
+            _guard.Rhs := _bg2;
             
 
             Equal(actual := _guard.Check(), expected := _q);
@@ -177,10 +177,10 @@ NAMESPACE Simatic.Ax.StateFramework.Test
             _b2 := b2;
             _q := q;
 
-            _bg1.value := REF(_b1);
-            _bg2.value := REF(_b2);
-            _guard.lhs := _bg1;
-            _guard.rhs := _bg2;
+            _bg1.Value := REF(_b1);
+            _bg2.Value := REF(_b2);
+            _guard.Lhs := _bg1;
+            _guard.Rhs := _bg2;
             
 
             Equal(actual := _guard.Check(), expected := _q);
@@ -210,8 +210,8 @@ NAMESPACE Simatic.Ax.StateFramework.Test
             _b1 := b1;
             _q := q;
 
-            _bg1.value := REF(_b1);
-            _guard.lhs := _bg1;          
+            _bg1.Value := REF(_b1);
+            _guard.Guard := _bg1;          
 
             Equal(actual := _guard.Check(), expected := _q);
             _guard.Reset();
@@ -234,13 +234,13 @@ NAMESPACE Simatic.Ax.StateFramework.Test
             _compareToValue := 10;
             _value := 12;
                             
-            _guard._condition := Condition#GT;
-            _guard._value := REF(_value);
-            _guard._compareToValue := _compareToValue;
+            _guard.Condition := Condition#GT;
+            _guard.Value := REF(_value);
+            _guard.CompareToValue := _compareToValue;
             
             Equal(actual := _guard.Check(), expected := TRUE);
 
-            _guard._compareToValue := 20;
+            _guard.CompareToValue := 20;
             Equal(actual := _guard.Check(), expected := FALSE);
 
         END_METHOD
@@ -251,12 +251,12 @@ NAMESPACE Simatic.Ax.StateFramework.Test
             _compareToValue := 10;
             _value := 10;
                             
-            _guard._condition := Condition#EQ;
-            _guard._value := REF(_value);
-            _guard._compareToValue := _compareToValue;
+            _guard.Condition := Condition#EQ;
+            _guard.Value := REF(_value);
+            _guard.CompareToValue := _compareToValue;
             
             Equal(actual := _guard.Check(), expected := TRUE);
-            _guard._compareToValue := 11;
+            _guard.CompareToValue := 11;
             Equal(actual := _guard.Check(), expected := FALSE);
 
         END_METHOD
