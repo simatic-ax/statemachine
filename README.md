@@ -14,24 +14,24 @@ apax add @simatic-ax/statemachine
 ```
 Simatic.Ax.StateFramework
 ```
+## StatemachineController
+### Class diagram
+![](./doc/statecontroller.png)
+
+## States
+
+### Class diagram
+![](./doc/state.png)
+
+## Transitions
+
+### Class diagram
+![](./doc/transition.png)
+
 ## Guards
 
 ### Class diagram
 ![](./doc/guard.png)
-
-<!-- ```mermaid
-classDiagram
-    class IGuard {
-        <<interface>>
-        Check()
-        Reset()
-    }
-
-    class ConcreteGuard {
-        + <ClassInterface>
-    }
-    IGuard <|-- ConcreteGuard : implements
-``` -->
 
 ### Available guards
 
@@ -176,8 +176,14 @@ PROGRAM SampleProgram
 END_PROGRAM
 ```
 
-## Transitions
-## States
+## StateLogger
+
+### Class diagram
+
+![](./doc/logger.png)
+
+
+
 
 ## Example
 ## Contribution
