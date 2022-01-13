@@ -33,7 +33,7 @@ NAMESPACE Simatic.Ax.StateFramework
     TYPE
         LogMessage : STRUCT
             timestamp : DATE_AND_TIME;
-            message : String;
+            message : STRING;
         END_STRUCT;
     END_TYPE
 

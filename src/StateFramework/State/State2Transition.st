@@ -5,7 +5,7 @@ NAMESPACE Simatic.Ax.StateFramework
     CLASS State2Transition EXTENDS AbstractState
 
         VAR PUBLIC
-            transition2 : ITransition;
+            Transition2 : ITransition;
         END_VAR
 
         METHOD PUBLIC OVERRIDE OnEntry

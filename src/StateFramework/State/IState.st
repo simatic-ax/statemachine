@@ -22,7 +22,7 @@ NAMESPACE Simatic.Ax.StateFramework
         METHOD GetStateID : INT
         END_METHOD
 
-        METHOD GetStateName : String
+        METHOD GetStateName : STRING
         END_METHOD
 
     END_INTERFACE

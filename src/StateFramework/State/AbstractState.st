@@ -4,7 +4,7 @@ NAMESPACE Simatic.Ax.StateFramework
     CLASS ABSTRACT AbstractState IMPLEMENTS IState
 
         VAR PUBLIC
-            transition1 : ITransition;
+            Transition1 : ITransition;
             StateID : INT;
             StateName : String;
         END_VAR

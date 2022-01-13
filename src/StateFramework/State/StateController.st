@@ -1,7 +1,7 @@
 NAMESPACE Simatic.Ax.StateFramework
     // Named values for states
     
-    CLASS StatemachineController
+    CLASS StateController IMPLEMENTS IStateController
 
         VAR PUBLIC
             InitialState: IState;

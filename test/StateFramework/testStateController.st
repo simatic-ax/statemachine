@@ -4,9 +4,9 @@ USING AxUnit.Assert;
 
 NAMESPACE Simatic.Ax.StateFramework.TestStateController
     {TestFixture}
-    CLASS StateController
+    CLASS StateControllerTest
         VAR
-            sc : StatemachineController;
+            sc : StateController;
             is : InitialState := (StateName := 'Initial State');
             ns : NextState1 := (StateName := 'Next State');
             t1 : Transition;
