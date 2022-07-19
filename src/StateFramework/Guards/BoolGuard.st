@@ -1,4 +1,7 @@
 NAMESPACE Simatic.Ax.StateFramework    
+    /// BOOL Guard 
+    /// Value : REF_TO BOOL
+    /// Check()-Method returns true when REF_TO value is TRUE
     CLASS BoolGuard IMPLEMENTS IGuard
         VAR PUBLIC
             Value : REF_TO BOOL;

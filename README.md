@@ -16,22 +16,22 @@ Simatic.Ax.StateFramework
 ```
 ## StatemachineController
 ### Class diagram
-![](./doc/statecontroller.png)
+![](./docs/statecontroller.png)
 
 ## States
 
 ### Class diagram
-![](./doc/state.png)
+![](./docs/state.png)
 
 ## Transitions
 
 ### Class diagram
-![](./doc/transition.png)
+![](./docs/transition.png)
 
 ## Guards
 
 ### Class diagram
-![](./doc/guard.png)
+![](./docs/guard.png)
 
 ### Available guards
 
@@ -180,7 +180,7 @@ END_PROGRAM
 
 ### Class diagram
 
-![](./doc/logger.png)
+![](./docs/logger.png)
 
 
 
