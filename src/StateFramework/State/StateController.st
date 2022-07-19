@@ -44,11 +44,35 @@ NAMESPACE Simatic.Ax.StateFramework
 
         END_METHOD
 
+        /// Terminates state
+        /// Call the Action method of the actual state
+        /// Call the OnExit method of the actual state
+        /// Reset all guards
         METHOD PRIVATE TerminateState
             VAR_INPUT
                 state : IState;
             END_VAR
-            ;
+            state.Action();
+            state.OnExit();
+            _lastState := state.GetStateId();
+
+            // Reset all other guards
+            THIS.ResetGuards();
+
+        END_METHOD
+
+        /// Terminates the actual state and start with the InitialState
+        METHOD PUBLIC Restart : IState
+            IF (_activeState <> NULL) THEN
+                THIS.TerminateState(_activeState);
+            END_IF;
+            IF (InitialState <> NULL) THEN
+                THIS.ActivateState(InitialState);
+                Restart := InitialState;
+            ELSE
+                Restart := NULL;
+            END_IF;
+            
         END_METHOD
 
         METHOD PRIVATE ActivateState
@@ -81,13 +105,7 @@ NAMESPACE Simatic.Ax.StateFramework
                     END_IF;
                     
                     IF (actualTransition.GetGuard().Check()) THEN
-                        _activeState.Action();
-                        _activeState.OnExit();
-                        _lastState := _activeState.GetStateId();
 
-                        // Reset all other guards
-                        THIS.ResetGuards();
-    
                         // switchover state
                         THIS.TerminateState(_activeState);
                         // TODO write new state into list

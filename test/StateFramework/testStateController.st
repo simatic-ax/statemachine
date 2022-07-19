@@ -9,8 +9,10 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
             sc : StateController;
             is : InitialState := (StateName := 'Initial State');
             ns : NextState1 := (StateName := 'Next State');
+            ls : LastState := (StateName := 'LastState');
             t1 : Transition;
             t2 : Transition;
+            t3 : Transition;
             g1 : BoolGuard;
             b : BOOL;
         END_VAR
@@ -67,7 +69,22 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
 
             sc.InitialState := is;
         END_METHOD        
+        METHOD SetupStatemachine3States        
+            g1.Value := REF(b);
+            t1.Guard := g1;
+            is.Transition1 := t1;
+            t1.NextState := ns;
+            
+            ns.Transition1 := t2;
+            t2.NextState := ls;
+            t2.Guard := g1;
 
+            ls.Transition1 := t3;
+            t3.NextState := NULL;
+            t3.Guard := g1;
+            
+            sc.InitialState := is;
+        END_METHOD    
         {Test}
         METHOD PUBLIC TestExecute_ExpectStatusRunning
             THIS.SetupStatemachine();
@@ -94,6 +111,31 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
             sc.Execute();
             Equal(expected := StateControllerStatus#STATUS_NO_NEXTSTATE, actual := sc.GetState());
         END_METHOD        
+
+        {Test}
+        METHOD PUBLIC Restart_starts_with_the_InitialState
+            THIS.SetupStatemachine();
+            // 1. Cycle
+            b := TRUE; // Transition to nextState = TRUE
+            sc.Execute();  // finalize first state
+            // 2. Cycle
+            b := FALSE;
+            sc.Restart();
+            sc.Execute();  // finalize next state (switchover fails, because next state has no own next state)
+            Equal(expected := StateControllerStatus#STATUS_IS_RUNNING, actual := sc.GetState());
+            Equal(expected := 'Initial State', actual := sc.GetActiveStateName());
+        END_METHOD                
+
+        {Test}
+        METHOD PUBLIC States_where_all_transitions_are_true_passed_in_two_cycles
+            THIS.SetupStatemachine3States();
+            // 1. Cycle
+            b := TRUE; // Transition to nextState = TRUE
+            sc.Execute();  
+            sc.Execute();  
+            Equal(expected := StateControllerStatus#STATUS_IS_RUNNING, actual := sc.GetState());
+            Equal(expected := 'LastState', actual := sc.GetActiveStateName());
+        END_METHOD    
 
     END_CLASS
 
@@ -151,6 +193,34 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
 
         METHOD PUBLIC OVERRIDE Action
             ActionCount1 := ActionCount1 + 1;
+        END_METHOD
+    END_CLASS
+
+    CLASS LastState EXTENDS AbstractState
+        VAR PUBLIC
+            OnEntryCount99 : INT;
+            OnExitCount99 : INT;
+            ActionCount99 : INT;
+        END_VAR
+        VAR PROTECTED
+            
+        END_VAR
+        
+        METHOD PUBLIC MyMethod
+            ;
+        END_METHOD
+    
+        METHOD PUBLIC OVERRIDE OnEntry
+            OnEntryCount99 := OnEntryCount99 + 1;
+            
+        END_METHOD
+
+        METHOD PUBLIC OVERRIDE OnExit
+            OnExitCount99 := OnExitCount99 + 1;
+        END_METHOD
+
+        METHOD PUBLIC OVERRIDE Action
+            ActionCount99 := ActionCount99 + 1;
         END_METHOD
     END_CLASS
 
