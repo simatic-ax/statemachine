@@ -1,3 +1,4 @@
+USING Simatic.Ax.StatePattern;
 USING Simatic.Ax.Stateframework;
 
 NAMESPACE Simatic.Ax.StateFramework
@@ -8,6 +9,11 @@ NAMESPACE Simatic.Ax.StateFramework
             StateID : INT;
             StateName : String;
         END_VAR
+
+        VAR PROTECTED
+             _actualStatus : StateStatus;
+        END_VAR
+
 
         METHOD PUBLIC ABSTRACT OnEntry
         END_METHOD
