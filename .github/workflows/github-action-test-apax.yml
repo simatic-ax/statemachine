@@ -1,0 +1,80 @@
+name: test-apax
+on:
+  push:
+    branches:
+      - '*'
+      - '!release'
+env:
+  ACTIONS_REPO: simatic-ax/actions
+  VERSIONING_TOOL_REPO: simatic-ax/simatic_versioning
+
+jobs:
+  build:
+    name: "Build apax library"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Clone the library repository"
+        uses: actions/checkout@v3
+
+      - name: "Clone repository for CI workflows"
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ env.ACTIONS_REPO }}
+          token: ${{ secrets.CI_KIT_TOKEN }}
+          path: actions
+
+      - name: "Check contents of actions folder"
+        run: tree -d ./actions
+      - name: "Install apax and dependencies"
+        uses: ./actions/.github/actions/setup-apax-runner
+        with:
+          apax-access-token: ${{ secrets.APAX_TOKEN }}
+
+      - name: "Login to the private repo"
+        run: |
+          apax login \
+          --registry "https://npm.pkg.github.com" \
+          --password ${{ secrets.CI_KIT_TOKEN }}
+
+      - name: "Build apax library"
+        uses: ./actions/.github/actions/apax-build
+        with:
+          library-directory: ${{ github.workspace }}
+          apax-access-token: ${{ secrets.APAX_TOKEN }}
+
+      - name: "Upload artifact"
+        uses: actions/upload-artifact@v3
+        with:
+          name: library-artifact
+          path: bin/
+
+  test:
+    name: "Test apax library"
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: "Clone the library repository"
+        uses: actions/checkout@v3
+
+      - name: "Clone repository for CI workflows"
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ env.ACTIONS_REPO }}
+          token: ${{ secrets.CI_KIT_TOKEN }}
+          path: actions
+      - name: "Install apax and dependencies"
+        uses: ./actions/.github/actions/setup-apax-runner
+        with:
+          apax-access-token: ${{ secrets.APAX_TOKEN }}
+
+      - name: "Login to the private repo"
+        run: |
+          apax login \
+          --registry "https://npm.pkg.github.com" \
+          --password ${{ secrets.CI_KIT_TOKEN }}
+
+      - name: "Install workspace dependencies and test"
+        uses: ./actions/.github/actions/apax-test
+        with:
+          apax-access-token: ${{ secrets.APAX_TOKEN }}
