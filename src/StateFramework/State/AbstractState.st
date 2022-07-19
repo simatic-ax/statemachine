@@ -1,8 +1,9 @@
 USING Simatic.Ax.StatePattern;
+USING Simatic.Ax.StatePattern;
 USING Simatic.Ax.Stateframework;
 
 NAMESPACE Simatic.Ax.StateFramework
-    CLASS ABSTRACT AbstractState IMPLEMENTS IState
+    CLASS ABSTRACT AbstractState IMPLEMENTS IState, IStateMuteable
 
         VAR PUBLIC
             Transition1 : ITransition;
@@ -15,7 +16,10 @@ NAMESPACE Simatic.Ax.StateFramework
         END_VAR
 
 
-        METHOD PUBLIC ABSTRACT OnEntry
+        // METHOD PUBLIC ABSTRACT OnEntry
+        // END_METHOD
+        METHOD PUBLIC OnEntry
+            _actualStatus := StateStatus#Active;
         END_METHOD
 
         METHOD PUBLIC ABSTRACT OnExit
@@ -47,8 +51,19 @@ NAMESPACE Simatic.Ax.StateFramework
             GetStateID := StateID;
         END_METHOD
     
-        METHOD PUBLIC GetStateName : STRING
+        METHOD PUBLIC FINAL GetStateName : STRING
             GetStateName := StateName;
+        END_METHOD
+
+        METHOD PUBLIC FINAL GetStatus : StateStatus
+            GetStatus := _actualStatus;
+        END_METHOD
+
+        METHOD PUBLIC FINAL SetStatus
+            VAR_INPUT
+                status : StateStatus;
+            END_VAR
+            _actualStatus := status;
         END_METHOD
     END_CLASS
 END_NAMESPACE

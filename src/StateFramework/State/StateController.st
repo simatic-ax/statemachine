@@ -44,23 +44,6 @@ NAMESPACE Simatic.Ax.StateFramework
 
         END_METHOD
 
-        /// Terminates state
-        /// Call the Action method of the actual state
-        /// Call the OnExit method of the actual state
-        /// Reset all guards
-        METHOD PRIVATE TerminateState
-            VAR_INPUT
-                state : IState;
-            END_VAR
-            state.Action();
-            state.OnExit();
-            _lastState := state.GetStateId();
-
-            // Reset all other guards
-            THIS.ResetGuards();
-
-        END_METHOD
-
         /// Terminates the actual state and start with the InitialState
         METHOD PUBLIC Restart : IState
             IF (_activeState <> NULL) THEN
@@ -75,15 +58,49 @@ NAMESPACE Simatic.Ax.StateFramework
             
         END_METHOD
 
+        /// Terminates state
+        /// Call the Action method of the actual state
+        /// Call the OnExit method of the actual state
+        /// Reset all guards
+        METHOD PRIVATE TerminateState
+            VAR_INPUT
+                state : IState;
+            END_VAR
+            VAR_TEMP
+                _muetabaleState : IStateMuteable;
+            END_VAR
+            state.Action();
+            state.OnExit();
+            _lastState := state.GetStateId();
+
+            // Reset all other guards
+            THIS.ResetGuards();
+
+            // Set status to Idle
+            _muetabaleState ?= state;
+            IF (_muetabaleState <> NULL) THEN 
+                _muetabaleState.SetStatus(status := StateStatus#Idle);
+            END_IF;
+        END_METHOD
+
         METHOD PRIVATE ActivateState
             VAR_INPUT
                 state : IState;
+            END_VAR
+            VAR_TEMP
+                _muetabaleState : IStateMuteable;
             END_VAR
             _activeState := state;
             _status := StateControllerStatus#STATUS_STATE_CHANGED;
             _activeStateId := _activeState.GetStateId();
             _activeStateName := _activeState.GetStateName();           
             // Call OnEntry method of new state
+                        // Set status to Idle
+            _muetabaleState ?= state;
+            IF (_muetabaleState <> NULL) THEN 
+                _muetabaleState.SetStatus(status := StateStatus#Active);
+            END_IF;
+            
             _activeState.OnEntry();     
         END_METHOD
 

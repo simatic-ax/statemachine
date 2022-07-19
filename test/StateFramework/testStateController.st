@@ -135,6 +135,7 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
             sc.Execute();  
             Equal(expected := StateControllerStatus#STATUS_IS_RUNNING, actual := sc.GetState());
             Equal(expected := 'LastState', actual := sc.GetActiveStateName());
+            Equal(expected := TRUE, actual := ls.GetStatus() = StateStatus#Active);
         END_METHOD    
 
     END_CLASS

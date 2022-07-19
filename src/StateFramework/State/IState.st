@@ -25,6 +25,8 @@ NAMESPACE Simatic.Ax.StateFramework
         METHOD GetStateName : STRING
         END_METHOD
 
+        METHOD GetStatus : StateStatus
+        END_METHOD
 
     END_INTERFACE
 END_NAMESPACE
