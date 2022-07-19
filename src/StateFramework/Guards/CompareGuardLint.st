@@ -1,5 +1,12 @@
 NAMESPACE Simatic.Ax.StateFramework
 
+    /// Condition
+    /// GT: Greater than compareValue
+    /// EQ: Equal to compareValue
+    /// LT: Less than compareValue
+    /// NE: Is not equal to compareValue
+    /// GE: Greater or equal to compareValue
+    /// LE: Less or equal to compareValue
     TYPE 
         Condition : (GT, EQ, LT, NE, GE, LE);
     END_TYPE

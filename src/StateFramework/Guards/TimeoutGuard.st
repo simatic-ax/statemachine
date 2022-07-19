@@ -17,6 +17,7 @@ NAMESPACE Simatic.Ax.StateFramework
             Timeout := timeoutValue;
         END_METHOD
 
+
         // ---------------- IMPLEMENT IGuard---------------------------
         METHOD PUBLIC Check : BOOL
             _ton(signal := TRUE, duration := Timeout);
