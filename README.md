@@ -1,46 +1,37 @@
 # Statemachine
 
 This library provides a state framework,to implement simple statemachines easily.
-
 ## Install this package
 
 Enter:
-
-```sh
+```cli
 apax add @simatic-ax/statemachine
 ```
 
-> to install this package you need to login into the GitHub registry. You'll find more information [here](https://github.com/simatic-ax/.sharedstuff/blob/main/doc/personalaccesstoken.md)
+> to install this package you need to login into the GitHub registry. You'll find more information [here](https://github.com/simatic-ax/.sharedstuff/blob/main/doc/personalaccesstoken.md) 
 
 ## Namespace
-
-```sh
+```
 Simatic.Ax.StateFramework
 ```
-
 ## StatemachineController
-
 ### Class diagram
-
-![img1](./docs/statecontroller.png)
+![](./docs/statecontroller.png)
 
 ## States
 
-### Class diagram states
-
-![img2](./docs/state.png)
+### Class diagram
+![](./docs/state.png)
 
 ## Transitions
 
-### Class diagram transitions
-
-![img3](./docs/transition.png)
+### Class diagram
+![](./docs/transition.png)
 
 ## Guards
 
-### Class diagram guards
-
-![img4](./docs/guard.png)
+### Class diagram
+![](./docs/guard.png)
 
 ### Available guards
 
@@ -59,7 +50,6 @@ Simatic.Ax.StateFramework
 The `AndGuard` is a guard, that returns `TRUE`, if both conditions (Lhs `AND` Rhs) are `TRUE`.
 
 Usage:
-
 ```iecst
 USING Simatic.Ax.StateFramework;
 
@@ -79,7 +69,6 @@ The `BoolGuard` is a guard, that has a referecne to a boolean variable and retur
 > Note: REF_TO IOM varibales is not working in AX
 
 Usage:
-
 ```iecst
 USING Simatic.Ax.StateFramework;
 
@@ -106,7 +95,6 @@ The `CompareGuardLint` is a guard, compares a LINT variable (value) with a compa
 > Note: REF_TO IOM variables is not working in AX
 
 Usage:
-
 ```iecst
 USING Simatic.Ax.StateFramework;
 
@@ -123,7 +111,6 @@ END_PROGRAM
 The count guard increments in every cycle the count value. When the value count has reached the value of the parameter `count`, the guard returns `TRUE`.
 
 Usage:
-
 ```iecst
 USING Simatic.Ax.StateFramework;
 
@@ -143,7 +130,6 @@ END_PROGRAM
 The `OrGuard` is a guard, that returns `TRUE`, if at minimum one of both conditions (Lhs `OR` Rhs) are `TRUE`.
 
 Usage:
-
 ```iecst
 USING Simatic.Ax.StateFramework;
 
@@ -156,12 +142,13 @@ PROGRAM SampleProgram
 END_PROGRAM
 ```
 
+
+
 ### TrueGuard
 
 The `TrueGuard` is a guard, that always returns.
 
 Usage:
-
 ```iecst
 USING Simatic.Ax.StateFramework;
 
@@ -177,7 +164,6 @@ END_PROGRAM
 The `XorGuard` is a guard, that returns `TRUE`, if exactly one condition (Lhs `XOR` Rhs) is `TRUE`.
 
 Usage:
-
 ```iecst
 USING Simatic.Ax.StateFramework;
 
@@ -194,10 +180,12 @@ END_PROGRAM
 
 ### Class diagram
 
-![img5](./docs/logger.png)
+![](./docs/logger.png)
+
+
+
 
 ## Example
-
 ## Contribution
 
 Thanks for your interest in contributing. Anybody is free to report bugs, unclear documentation, and other problems regarding this repository in the Issues section or, even better, is free to propose any changes to this repository using Merge Requests.

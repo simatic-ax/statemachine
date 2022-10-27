@@ -1,25 +1,15 @@
-# General information
 name: "@simatic-ax/statemachine"
 version: 0.0.0-placeholder
 author: Siemens AG
-# Description will be displayed in the apax extension
-description: Library to create state machines according an OOP state pattern
-# Workspace type library and target definition
 type: lib
-targets:
-  - '1500'
-  - 'axunit-llvm'
-# URL to repository
-repository: 
-  type: git
-  url: https://github.com/simatic-ax/statemachine
-# Local variables
 variables:
   APAX_BUILD_ARGS:
     - '--log Trace'
     - '--simulation'
     - '--debug'
-# Apax scripts
+targets:
+  - '1500'
+  - 'axunit-llvm'
 scripts:
   publishlib:
     - apax publish --package *.apax.tgz --registry 'https://npm.pkg.github.com/'
@@ -29,16 +19,14 @@ scripts:
     - apax test
     - apax version $1
     - apax pack
-# Dependencies
+    # - apax publishlib
 devDependencies:
-  '@ax/sdk': 3.0.2
-  "@simatic-ax/snippetscollection": 0.0.14
+  '@ax/sdk': 2.0.3
+  "@simatic-ax/snippetscollection": 0.0.13
 dependencies:
-  "@ax/system-timer": 3.0.9
-# Registry information, where the package will be published
+  "@ax/system-timer": 2.0.1
 registries:
   '@simatic-ax': 'https://npm.pkg.github.com/'
-# Files, which will be shipped with the library
 files:
   - 'README.md'
   - 'LICENSE.md'
