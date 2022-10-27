@@ -5,7 +5,6 @@ The `AndGuard` is a guard, that returns `TRUE`, if both conditions (Lhs `AND` Rh
 Example:
 andGuard returns true, after 1.5 seconds AND 5 calls.
 
-
 ```iecst
 USING Simatic.Ax.StateFramework;
 
