@@ -6,3 +6,4 @@
 *.tgz
 *.tracerec.json
 obj
+apax-lock.json
