@@ -16,8 +16,6 @@ repository:
 # Local variables
 variables:
   APAX_BUILD_ARGS:
-    - '--log Trace'
-    - '--simulation'
     - '--debug'
 # Apax scripts
 scripts:
