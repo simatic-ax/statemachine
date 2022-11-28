@@ -9,7 +9,7 @@ NAMESPACE Simatic.Ax.StatePattern
             _count : INT;
             _state : IState;
             _ton : OnDelay;
-            _first : BOOL := TRUE;
+            _first : BOOL;
             _status : StateStatus;
         END_VAR
 
@@ -17,13 +17,13 @@ NAMESPACE Simatic.Ax.StatePattern
             VAR_INPUT
                 newState : IState;
                 timeout : TIME;
-                reset : BOOL := FALSE;
+                reset : BOOL;
             END_VAR
 
             IF (newState <> NULL) THEN
-                IF (_first OR reset) THEN
+                IF (NOT _first OR reset) THEN
                     THIS.setState(newState := newState, timeout := timeout);
-                    _first := FALSE;
+                    _first := TRUE;
                 END_IF;
                 InitialState := TRUE;
             ELSE
