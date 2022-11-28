@@ -23,7 +23,7 @@ NAMESPACE Simatic.Ax.StateFramework
 
         METHOD PUBLIC FINAL OVERRIDE GetTransition : ITransition
             VAR_INPUT 
-                pos : UINT := UINT#0;
+                pos : UINT;
             END_VAR
             VAR_TEMP
                 cnt : UINT;
