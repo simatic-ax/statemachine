@@ -192,7 +192,7 @@ END_PROGRAM
 
 ## StateLogger
 
-### Class diagram
+### Class diagram for logger
 
 ![img5](./docs/logger.png)
 

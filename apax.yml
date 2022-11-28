@@ -10,7 +10,7 @@ targets:
   - '1500'
   - 'axunit-llvm'
 # URL to repository
-repository: 
+repository:
   type: git
   url: https://github.com/simatic-ax/statemachine
 # Local variables
@@ -30,7 +30,7 @@ scripts:
 # Dependencies
 devDependencies:
   '@ax/sdk': 3.0.2
-  "@simatic-ax/snippetscollection": 0.0.14
+  "@simatic-ax/snippetscollection": 0.0.15
 dependencies:
   "@ax/system-timer": 3.0.9
 # Registry information, where the package will be published
