@@ -1,4 +1,5 @@
 # markdownlint YAML configuration
+---
 
 # Default state for all rules
 default: true
@@ -8,5 +9,4 @@ line-length: false
 no-inline-html: false
 first-line-h1: false
 no-emphasis-as-header: false
-no-duplicate-heading: false
 link-fragments: false
