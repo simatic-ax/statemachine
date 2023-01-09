@@ -1,0 +1,4 @@
+on: push
+jobs:
+  lint-repo-and-markdown:
+    uses: simatic-ax/actions/.github/workflows/check-repository.yml@stable

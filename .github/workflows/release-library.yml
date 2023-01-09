@@ -1,0 +1,15 @@
+on:
+  push:
+    # Pattern matched against refs/tags
+    tags:        
+      - '*'
+
+jobs:
+  release-apax-lib:
+    uses: simatic-ax/actions/.github/workflows/apax-publish.yml@stable
+    secrets:
+      APAX_TOKEN: ${{ secrets.APAX_TOKEN }}
+      DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+
+    with:
+      VERSION: ${{ github.ref_name }}
