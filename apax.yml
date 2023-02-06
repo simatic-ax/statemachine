@@ -29,7 +29,7 @@ scripts:
     - apax pack
 # Dependencies
 devDependencies:
-  '@ax/sdk': 3.0.2
+  '@ax/sdk': 3.0.10
   "@simatic-ax/snippetscollection": 0.0.15
 dependencies:
   "@ax/system-timer": 3.0.9
