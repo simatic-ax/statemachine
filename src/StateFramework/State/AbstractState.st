@@ -1,7 +1,3 @@
-USING Simatic.Ax.StatePattern;
-USING Simatic.Ax.StatePattern;
-USING Simatic.Ax.Stateframework;
-
 NAMESPACE Simatic.Ax.StateFramework
     CLASS ABSTRACT AbstractState IMPLEMENTS IState, IStateMuteable
 
