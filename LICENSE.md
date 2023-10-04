@@ -20,6 +20,10 @@ For additional information on industrial security measures that may be implement
 
 You shall comply with all applicable sanctions, embargoes and (re-)export control regulations, and, in any event, with those of the European Union and the United States of America (collectively "Export Regulations"). In particular, the information, software and documentation provided by Siemens (collectively "Licensed Material") shall not be used, accessed or transferred, unless permitted by the Export Regulations or respective governmental licenses or approvals, (i) in or to any location prohibited by or subject to comprehensive sanctions (currently Russia, Cuba, Iran, North Korea, Syria, and the Crimea region of Ukraine, Donetsk and Luhansk regions of Ukraine) or license requirements according to the Export Regulations; (ii) by or to any individual or entity designated on a sanctioned party list of the Export Regulations; (iii) for any purpose prohibited by the Export Regulations (e.g. use in connection with armaments, nuclear technology or weapons); or (iv) to upload any content unless it is noncontrolled (e .g. in the EU: AL = N; in the U.S.: ECCN = N or EAR99). If required to enable authorities or Siemens to conduct export control checks, You, upon request by Siemens, shall promptly provide Siemens with all information pertaining to You, the intended use and the location of use of the Licensed Material. Siemens shall not be obligated to fulfill this Agreement if such fulfillment is prevented by any impediments arising out of national or international foreign trade or customs requirements or any embargoes or other sanctions.
 
+**1.4 Hyperlinks and third party content**
+
+The Software and / or the documentation may contain hyperlinks to the web pages of third parties or references to third party content. Siemens shall have no liability for the contents of such web pages and does not make representations about or endorse such web pages or their contents as its own, as Siemens does not control the information on such web pages and is not responsible for the contents and information given thereon. The use of such web pages shall be Your sole risk.
+
 **2. Open Source License for Software provided in source code and the generated source code**
 
 In case the Software contains or generates source code the following open source license (Open license terms) shall apply for such source code:
@@ -60,4 +64,4 @@ Siemens shall not assume any liability, for any legal reason whatsoever, includi
 
 By using the Software and the Licensed Material, You acknowledge that Siemens cannot be held liable for any damage beyond the liability provisions described.
 
-Royalty-Free Software License Version 1.1 – 30.09.2022
+Royalty-Free Software License Version 1.2 – 26.07.2023
