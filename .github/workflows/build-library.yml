@@ -1,17 +1,7 @@
 on: push
 
 jobs:
-  build-apax-lib:
-    uses: simatic-ax/actions/.github/workflows/apax-build.yml@stable
-    secrets:
-      APAX_TOKEN: ${{ secrets.APAX_TOKEN }}
-      SIMATIC_AX_TOKEN: ${{ secrets.DEPLOY_KEY }}
-    with:
-      ACTIONS_REF: stable
-      LOGIN_SIMATIC_AX: true
-
   test-apax-lib:
-    needs: build-apax-lib
     uses: simatic-ax/actions/.github/workflows/apax-build-test.yml@stable
     secrets:
       APAX_TOKEN: ${{ secrets.APAX_TOKEN }}
