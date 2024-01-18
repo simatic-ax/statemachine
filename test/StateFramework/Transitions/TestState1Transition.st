@@ -5,9 +5,17 @@ NAMESPACE Simatic.Ax.StateFramework.Test
     {TestFixture}
     CLASS TestTransition1
         VAR
-            state1 : State1Transition := (StateId := 99, StateName := 'blabla');
+            state1 : State1Transition;
+            state1StateLess : State1Transition := (StateId := 99, StateName := 'blabla');
             trans : Transition;
         END_VAR
+
+        
+        {TestSetup}
+        METHOD PUBLIC MyTestSetup
+            // Will be called before each test
+            state1 := state1StateLess;
+        END_METHOD
 
         {Test}
         METHOD PUBLIC  TransitionCount_Expect_0
