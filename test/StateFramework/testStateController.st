@@ -8,12 +8,18 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
         VAR
             sc : StateController;
             scStateLess : StateController;
-            is : InitialState := (StateName := 'Initial State');
-            ns : NextState1 := (StateName := 'Next State');
-            ls : LastState := (StateName := 'LastState');
+            is : InitialState;
+            ns : NextState1;
+            ls : LastState;
+            isStateLess : InitialState := (StateName := 'Initial State');
+            nsStateLess : NextState1 := (StateName := 'Next State');
+            lsStateLess : LastState := (StateName := 'Last State');
             t1 : Transition;
             t2 : Transition;
             t3 : Transition;
+            t1StateLess : Transition;
+            t2StateLess : Transition;
+            t3StateLess : Transition;
             g1 : BoolGuard;
             b : BOOL;
         END_VAR
@@ -22,15 +28,26 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
         METHOD PUBLIC MyTestSetup
             // Will be called before each test
             sc := scStateLess;
-            g1.Value := REF(b);
-            t1.Guard := g1;
-            is.Transition1 := t1;
-            t1.NextState := ns;
-            
-            ns.Transition1 := t2;
-            t2.Guard := g1;
+            is := isStateLess; 
+            ns := nsStateLess; 
+            ls := lsStateLess;
+            t1 := t1StateLess;
+            t2 := t2StateLess;
+            t3 := t3StateLess;
 
+            b := FALSE;
+            g1.Value := REF(b);
+            
+            is.Transition1 := t1;
+            t1.Guard := g1;
+            t1.NextState := ns;
+
+            ns.Transition1 := t2;
+            t2.NextState := ls;
+            t2.Guard := g1;
             sc.InitialState := is;
+
+            // ls.Transition1 := t3;
 
         END_METHOD
 
@@ -69,14 +86,18 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
            
         METHOD SetupStatemachine3States        
             g1.Value := REF(b);
-            t1.Guard := g1;
+            
+            // configure initial state
             is.Transition1 := t1;
             t1.NextState := ns;
+            t1.Guard := g1;
             
+            // configure next state
             ns.Transition1 := t2;
             t2.NextState := ls;
             t2.Guard := g1;
 
+            // configure last state
             ls.Transition1 := t3;
             t3.NextState := NULL;
             t3.Guard := g1;
@@ -86,14 +107,14 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
         {Test}
         METHOD PUBLIC TestExecute_ExpectStatusRunning
             sc.Execute();
-            Equal(expected := TRUE, actual := sc.GetState() = StateControllerStatus#STATUS_IS_RUNNING);
+            Equal2(expected := StateControllerStatus#STATUS_IS_RUNNING, actual := sc.GetState());
         END_METHOD
 
         {Test}
         METHOD PUBLIC TestExecute_ChangeStateTransition_True
             b := TRUE;
             sc.Execute();
-            Equal(expected := TRUE, actual := sc.GetState() = StateControllerStatus#STATUS_IS_RUNNING);
+            Equal2(expected := StateControllerStatus#STATUS_IS_RUNNING, actual := sc.GetState());
         END_METHOD
    
 
@@ -102,9 +123,9 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
             b := TRUE;
             sc.Execute();  // finalize first state
             sc.Execute();  // finalize next state (switchover fails, because next state has no own next state)
-            Equal(expected := TRUE, actual := sc.GetState() = StateControllerStatus#STATUS_NO_NEXTSTATE);
+            Equal2(expected := StateControllerStatus#STATUS_IS_RUNNING, actual := sc.GetState());
             sc.Execute();
-            Equal(expected := TRUE, actual := sc.GetState() = StateControllerStatus#STATUS_NO_NEXTSTATE);
+            Equal2(expected := StateControllerStatus#STATUS_NO_NEXTSTATE, actual := sc.GetState());
         END_METHOD        
 
         {Test}
@@ -116,7 +137,7 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
             b := FALSE;
             sc.Restart();
             sc.Execute();  // finalize next state (switchover fails, because next state has no own next state)
-            Equal(expected := TRUE, actual := StateControllerStatus#STATUS_IS_RUNNING = sc.GetState());
+            Equal(expected := StateControllerStatus#STATUS_IS_RUNNING, actual := sc.GetState());
             Equal(expected := 'Initial State', actual := sc.GetActiveStateName());
         END_METHOD                
 
@@ -126,8 +147,8 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
             b := TRUE; // Transition to nextState = TRUE
             sc.Execute();  
             sc.Execute();  
-            Equal(expected := TRUE, actual := sc.GetState() = StateControllerStatus#STATUS_IS_RUNNING);
-            Equal(expected := 'LastState', actual := sc.GetActiveStateName());
+            Equal(expected := StateControllerStatus#STATUS_IS_RUNNING, actual := sc.GetState());
+            Equal(expected := 'Last State', actual := sc.GetActiveStateName());
             Equal(expected := TRUE, actual := ls.GetStatus() = StateStatus#Active);
         END_METHOD    
 
