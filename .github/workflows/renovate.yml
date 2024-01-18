@@ -6,5 +6,4 @@ jobs:
     uses: simatic-ax/actions/.github/workflows/renovate.yml@main
     secrets:
       APAX_TOKEN: ${{ secrets.APAX_TOKEN }}
-      DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
       RENOVATE_TOKEN: ${{ secrets.RENOVATE_TOKEN }}
