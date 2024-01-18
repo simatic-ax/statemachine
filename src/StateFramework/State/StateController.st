@@ -141,6 +141,9 @@ NAMESPACE Simatic.Ax.StateFramework
                         EXIT; 
                     END_IF;                
                 END_FOR;
+            ELSE
+                _status := StateControllerStatus#STATUS_NO_TRANSITION;
+                RETURN;
             END_IF;
             _status := StateControllerStatus#STATUS_IS_RUNNING;
             // TODO action will be called after OnExit --> has to be changed

@@ -125,7 +125,7 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
             sc.Execute();  // finalize next state (switchover fails, because next state has no own next state)
             Equal2(expected := StateControllerStatus#STATUS_IS_RUNNING, actual := sc.GetState());
             sc.Execute();
-            Equal2(expected := StateControllerStatus#STATUS_NO_NEXTSTATE, actual := sc.GetState());
+            Equal2(expected := StateControllerStatus#STATUS_NO_TRANSITION, actual := sc.GetState());
         END_METHOD        
 
         {Test}
