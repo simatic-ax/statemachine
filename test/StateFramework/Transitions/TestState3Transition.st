@@ -6,10 +6,17 @@ NAMESPACE Simatic.Ax.StateFramework.Test
     CLASS TestTransition3
         VAR
             state3 : State3Transition;
+            state3StateLess : State3Transition;
             trans1 : Transition;
             trans2 : Transition;
             trans3 : Transition;
         END_VAR
+
+        {TestSetup}
+        METHOD PUBLIC MyTestSetup
+            // Will be called before each test
+            state3 := state3StateLess;
+        END_METHOD
 
         {Test}
         METHOD PUBLIC  Set_no_trans_And_Expect_0

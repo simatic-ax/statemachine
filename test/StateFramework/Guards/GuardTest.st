@@ -8,7 +8,14 @@ NAMESPACE Simatic.Ax.StateFramework.Test
     CLASS CountGuardTest
         VAR
             _guard : Simatic.Ax.StateFramework.CountGuard;
+            _guardStateless : Simatic.Ax.StateFramework.CountGuard;
         END_VAR
+
+        {TestSetup}
+        METHOD PUBLIC MyTestSetup
+            // Will be called before each test
+            _guard := _guardStateless;
+        END_METHOD
 
         {Test}
         METHOD PUBLIC TestCheck_Two_Times_Expect_TRUE
