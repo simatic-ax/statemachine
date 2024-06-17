@@ -13,10 +13,29 @@ targets:
 repository:
   type: git
   url: https://github.com/simatic-ax/statemachine
+# Registry information, where the package will be published
+registries:
+  '@simatic-ax': 'https://npm.pkg.github.com/'
 # Local variables
 variables:
   APAX_BUILD_ARGS:
     - '--debug'
+# Install settings
+installStrategy: strict
+apaxVersion: 3.2.1
+# Dependencies
+devDependencies:
+  '@ax/sdk': 2405.0.0
+  "@simatic-ax/snippetscollection": 1.0.0
+dependencies:
+  "@ax/system-timer": 7.0.17
+# Files, which will be shipped with the library
+files:
+  - 'README.md'
+  - 'LICENSE.md'
+  - 'doc'
+  - 'src' # ship library with source
+  # - 'bin/1500/'   # ship library with binary
 # Apax scripts
 scripts:
   publishlib:
@@ -27,21 +46,3 @@ scripts:
     - apax test
     - apax version $1
     - apax pack
-# Dependencies
-devDependencies:
-  '@ax/sdk': 2405.0.0
-  "@simatic-ax/snippetscollection": 1.0.0
-dependencies:
-  "@ax/system-timer": 7.0.17
-# Registry information, where the package will be published
-registries:
-  '@simatic-ax': 'https://npm.pkg.github.com/'
-# Files, which will be shipped with the library
-files:
-  - 'README.md'
-  - 'LICENSE.md'
-  - 'doc'
-  - 'src' # ship library with source
-  # - 'bin/1500/'   # ship library with binary
-installStrategy: strict
-apaxVersion: 3.1.0
