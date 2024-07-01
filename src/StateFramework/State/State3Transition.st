@@ -49,7 +49,7 @@ NAMESPACE Simatic.Ax.StateFramework
                 CASE pos OF
                     UINT#0: GetTransition := transition1;
                     UINT#1: GetTransition := transition2;
-                    UINT#2: GetTransition := transition2;
+                    UINT#2: GetTransition := transition3;
                 ELSE
                     GetTransition := NULL;
                 END_CASE;                
