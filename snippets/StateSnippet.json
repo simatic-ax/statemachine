@@ -1,0 +1,14 @@
+{
+    "StateSnippet": {
+    "scope": "st",
+    "prefix": ["State template 1 state"],
+    "body": [
+        "State$1 : State$2 := (",
+            "StateName := '$1',",
+            "Transition1 := T$1To$4);",
+        "T$1To$4 : Transition := (Guard := G$1To$4, NextState := State$4);",
+        "G$1To$4 : PlcOpenGuard := (Command := SL_CommandProvider);"
+    ],
+    "description": "Creates an namespace template"
+    }    
+}
