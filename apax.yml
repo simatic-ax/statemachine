@@ -25,10 +25,10 @@ installStrategy: strict
 apaxVersion: 3.2.1
 # Dependencies
 devDependencies:
-  '@ax/sdk': 2405.1.0
+  '@ax/sdk': 2411.0.0
   "@simatic-ax/snippetscollection": 1.0.0
 dependencies:
-  "@ax/system-timer": ^7.1.47
+  "@ax/system-timer": ^8.0.7
 # Files, which will be shipped with the library
 files:
   - 'README.md'
