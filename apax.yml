@@ -28,7 +28,7 @@ devDependencies:
   '@ax/sdk': 2411.0.0
   "@simatic-ax/snippetscollection": 1.0.0
 dependencies:
-  "@ax/system-timer": ^8.0.7
+  "@ax/system-timer": ^9.0.0
 # Files, which will be shipped with the library
 files:
   - 'README.md'
