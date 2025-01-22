@@ -5,3 +5,5 @@ obj
 TestResult
 *.tgz
 assets
+/.vs
+/.vscode
