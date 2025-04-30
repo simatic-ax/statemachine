@@ -1,0 +1,87 @@
+# This workflow is going to be used during the development phase of the project
+# The workflow builds and tests the the sources on the following triggers:
+#   - once a change is pushed to the main branch or any of its sub-branches
+name: Library development workflow
+
+on:
+  push:
+    branches:
+      - 'main'  # runs the workflow, once new changes have been integrated to main
+      - 'main/**' # runs the workflow, once new changes have been integrated to a sub-branch of main
+  pull_request:
+    branches:
+      - 'main' # run workflow in the scope of pull requests towards main
+  workflow_call:
+    secrets:
+      APAX_TOKEN:
+        required: true
+    inputs:
+      ref:
+        required: true
+        type: string
+
+permissions:
+  contents: read     # required for checkout
+  packages: read     # required for pulling the container
+  actions: write     # required for artifact uploading
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-24.04
+    container:
+      image: ghcr.io/simatic-ax/ci-images/apax-ci-image:3.4.2
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    steps: 
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          # either check out a provided reference, or use the reference that triggered this workflow, e.g. a push, PR or a release
+          ref: ${{ inputs.ref != '' && inputs.ref || github.ref }}
+
+      - name: Login to required registries
+        uses: simatic-ax/actions/apax-login@v3
+        with:
+          apax-token: ${{ secrets.APAX_TOKEN }}
+          registries: |
+            https://npm.pkg.github.com/,${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install dependencies
+        uses: simatic-ax/actions/apax-install@v3
+        with:
+          immutable: true
+
+      - name: Build source code
+        uses: simatic-ax/actions/apax-build@v3
+        with:
+          apax-build-targets: |
+            llvm
+            1500
+          apax-build-args: |
+            --debug
+            --log Debug
+
+      - name: Test source code
+        uses: simatic-ax/actions/apax-test@v3
+        with:
+          coverage: true
+          loglevel: debug
+
+      - name: Check links
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          check-modified-files-only: 'yes'
+          base-branch: 'main'
+
+      - name: Upload build artifacts
+        if: ${{ github.event_name == 'workflow_call' || github.event_name == 'release'}}
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            bin/1500 
+            bin/llvm
+          retention-days: 90
+          if-no-files-found: error
