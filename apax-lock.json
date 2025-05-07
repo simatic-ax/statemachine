@@ -7,10 +7,10 @@
     "name": "@simatic-ax/statemachine",
     "version": "0.0.0-placeholder",
     "dependencies": {
-      "@ax/system-timer": "10.0.24"
+      "@ax/system-timer": "^10.0.24"
     },
     "devDependencies": {
-      "@ax/sdk": "2504.0.0",
+      "@ax/sdk": "^2504.0.0",
       "@simatic-ax/snippetscollection": "1.0.0"
     },
     "catalogs": {
@@ -603,6 +603,13 @@
       ],
       "dependencies": {}
     },
+    "@ax/st-docs": {
+      "name": "@ax/st-docs",
+      "version": "10.0.85",
+      "integrity": "sha512-AWnR0yWP7cO+Ep97VWDPPr0hT/y9SJYNtj81PZdmML60fa6OM6hdVGqKgEzgUz/jwfkNTdE7yHnyUewjmx3ehA==",
+      "resolved": "https://registry.simatic-ax.siemens.io/@ax/st-docs/-/st-docs-10.0.85.tgz",
+      "dependencies": {}
+    },
     "@ax/system-strings": {
       "name": "@ax/system-strings",
       "version": "10.0.24",
@@ -664,13 +671,6 @@
       "cpu": [
         "x64"
       ],
-      "dependencies": {}
-    },
-    "@ax/st-docs": {
-      "name": "@ax/st-docs",
-      "version": "10.0.85",
-      "integrity": "sha512-AWnR0yWP7cO+Ep97VWDPPr0hT/y9SJYNtj81PZdmML60fa6OM6hdVGqKgEzgUz/jwfkNTdE7yHnyUewjmx3ehA==",
-      "resolved": "https://registry.simatic-ax.siemens.io/@ax/st-docs/-/st-docs-10.0.85.tgz",
       "dependencies": {}
     },
     "@ax/system-math": {
