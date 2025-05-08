@@ -30,7 +30,7 @@ jobs:
     name: Build and Test
     runs-on: ubuntu-24.04
     container:
-      image: ghcr.io/simatic-ax/ci-images/apax-ci-image:3.4.2
+      image: ghcr.io/simatic-ax/ci-images/apax-ci-image:3.5.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}

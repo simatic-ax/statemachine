@@ -22,27 +22,17 @@ variables:
     - '--debug'
 # Install settings
 installStrategy: strict
-apaxVersion: 3.2.1
 # Dependencies
 devDependencies:
-  '@ax/sdk': 2411.0.0
+  '@ax/sdk': ^2504.0.0
   "@simatic-ax/snippetscollection": 1.0.0
 dependencies:
-  "@ax/system-timer": ^8.0.7
+  "@ax/system-timer": ^10.0.24
 # Files, which will be shipped with the library
 files:
   - 'README.md'
   - 'LICENSE.md'
   - 'doc'
-  - 'src' # ship library with source
-  # - 'bin/1500/'   # ship library with binary
-  # Apax scripts
-scripts:
-  publishlib:
-    - apax publish --package *.apax.tgz --registry 'https://npm.pkg.github.com/'
-    - rm *.apax.tgz -f
-  createpackage:
-    - apax build
-    - apax test
-    - apax version $1
-    - apax pack
+  - 'bin' # ship library with binary
+catalogs:
+  "@ax/simatic-ax": ^2504.0.0
