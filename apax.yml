@@ -32,7 +32,7 @@ dependencies:
 files:
   - 'README.md'
   - 'LICENSE.md'
-  - 'doc'
+  - 'docs'
   - 'bin' # ship library with binary
 catalogs:
   "@ax/simatic-ax": ^2504.0.0
