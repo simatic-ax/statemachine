@@ -7,10 +7,10 @@
     "name": "@simatic-ax/statemachine",
     "version": "0.0.0-placeholder",
     "dependencies": {
-      "@ax/system-timer": "10.0.24"
+      "@ax/system-timer": "^10.0.24"
     },
     "devDependencies": {
-      "@ax/sdk": "2504.1.2",
+      "@ax/sdk": "^2504.1.2",
       "@simatic-ax/snippetscollection": "^1.1.0"
     },
     "catalogs": {
