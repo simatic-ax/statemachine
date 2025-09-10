@@ -24,8 +24,8 @@ variables:
 installStrategy: strict
 # Dependencies
 devDependencies:
-  '@ax/sdk': ^2504.0.0
-  "@simatic-ax/snippetscollection": 1.0.0
+  '@ax/sdk': ^2504.1.2
+  "@simatic-ax/snippetscollection": ^1.1.0
 dependencies:
   "@ax/system-timer": ^10.0.24
 # Files, which will be shipped with the library
@@ -35,4 +35,4 @@ files:
   - 'docs'
   - 'bin' # ship library with binary
 catalogs:
-  "@ax/simatic-ax": ^2504.0.0
+  "@ax/simatic-ax": ^2504.1.2
