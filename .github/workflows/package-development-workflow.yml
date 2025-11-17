@@ -30,7 +30,7 @@ jobs:
     name: Build and Test
     runs-on: ubuntu-24.04
     container:
-      image: ghcr.io/simatic-ax/ci-images/apax-ci-image:3.5.0
+      image: ghcr.io/simatic-ax/ci-images/apax-ci-image:4.2.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
@@ -42,19 +42,19 @@ jobs:
           ref: ${{ inputs.ref != '' && inputs.ref || github.ref }}
 
       - name: Login to required registries
-        uses: simatic-ax/actions/apax-login@v3
+        uses: simatic-ax/actions/apax-login@v4
         with:
           apax-token: ${{ secrets.APAX_TOKEN }}
           registries: |
             https://npm.pkg.github.com/,${{ secrets.GITHUB_TOKEN }}
 
       - name: Install dependencies
-        uses: simatic-ax/actions/apax-install@v3
+        uses: simatic-ax/actions/apax-install@v4
         with:
           immutable: true
 
       - name: Build source code
-        uses: simatic-ax/actions/apax-build@v3
+        uses: simatic-ax/actions/apax-build@v4
         with:
           apax-build-targets: |
             llvm
@@ -64,7 +64,7 @@ jobs:
             --log Debug
 
       - name: Test source code
-        uses: simatic-ax/actions/apax-test@v3
+        uses: simatic-ax/actions/apax-test@v4
         with:
           coverage: true
           loglevel: debug
