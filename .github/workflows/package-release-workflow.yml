@@ -28,7 +28,7 @@ jobs:
     needs: call-development
     runs-on: ubuntu-24.04
     container:
-      image: ghcr.io/simatic-ax/ci-images/apax-ci-image:3.5.0
+      image: ghcr.io/simatic-ax/ci-images/apax-ci-image:4.2.0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
@@ -49,24 +49,25 @@ jobs:
           path: bin
 
       - name: Version package
-        uses: simatic-ax/actions/apax-version@v3
+        uses: simatic-ax/actions/apax-version@v4
         with:
           version: ${{ github.event.release.tag_name }}
 
       - name: Package source code
-        uses: simatic-ax/actions/apax-pack@v3
+        uses: simatic-ax/actions/apax-pack@v4
         with:
           key: ${{ secrets.APAX_SIGNKEY_V2 }}
+          key-version: "v2"
 
       - name: Login to required registries
-        uses: simatic-ax/actions/apax-login@v3
+        uses: simatic-ax/actions/apax-login@v4
         with:
           apax-token: ${{ secrets.APAX_TOKEN }}
           registries: |
             https://npm.pkg.github.com/,${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish apax package
-        uses: simatic-ax/actions/apax-publish@v3
+        uses: simatic-ax/actions/apax-publish@v4
         with:
           registries: |
             https://npm.pkg.github.com
