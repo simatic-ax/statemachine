@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Check PR title for Conventional Commits compliance
-        uses: amannn/action-semantic-pull-request@v5
+        uses: amannn/action-semantic-pull-request@v6
         with:
           types: |
             feat
