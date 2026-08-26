@@ -76,11 +76,24 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
             sc.Execute();
             Equal(expected := 1, actual := is.OnEntryCount);
             Equal(expected := 1, actual := is.OnExitCount);
-            Equal(expected := 3, actual := is.ActionCount);
+            Equal(expected := 2, actual := is.ActionCount);
             Equal(expected := 1, actual := ns.OnEntryCount1);
             Equal(expected := 0, actual := ns.OnExitCount1);
             Equal(expected := 1, actual := ns.ActionCount1);
             ;
+        END_METHOD
+
+        {Test}
+        METHOD PUBLIC Transition_Does_Not_Call_Action_On_Leaving_State
+            sc.Execute();
+            b := TRUE;
+
+            sc.Execute();
+
+            Equal(expected := 1, actual := is.OnExitCount);
+            Equal(expected := 1, actual := ns.OnEntryCount1);
+            Equal(expected := 1, actual := is.ActionCount);
+            Equal(expected := 1, actual := ns.ActionCount1);
         END_METHOD
         
            
@@ -140,6 +153,25 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
             Equal(expected := StateControllerStatus#STATUS_IS_RUNNING, actual := sc.GetState());
             Equal(expected := 'Initial State', actual := sc.GetActiveStateName());
         END_METHOD                
+
+        {Test}
+        METHOD PUBLIC Restart_Calls_OnEntry_But_Defers_Action_To_Next_Execute
+            sc.Execute();
+            b := TRUE;
+            sc.Execute();
+
+            b := FALSE;
+            sc.Restart();
+
+            Equal(expected := 'Initial State', actual := sc.GetActiveStateName());
+            Equal(expected := 2, actual := is.OnEntryCount);
+            Equal(expected := 1, actual := is.OnExitCount);
+            Equal(expected := 1, actual := is.ActionCount);
+
+            sc.Execute();
+
+            Equal(expected := 2, actual := is.ActionCount);
+        END_METHOD
 
         {Test}
         METHOD PUBLIC States_where_all_transitions_are_true_passed_in_two_cycles

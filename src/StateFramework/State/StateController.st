@@ -59,7 +59,6 @@ NAMESPACE Simatic.Ax.StateFramework
         END_METHOD
 
         /// Terminates state
-        /// Call the Action method of the actual state
         /// Call the OnExit method of the actual state
         /// Reset all guards
         METHOD PRIVATE TerminateState
@@ -69,7 +68,6 @@ NAMESPACE Simatic.Ax.StateFramework
             VAR_TEMP
                 _muetabaleState : IStateMuteable;
             END_VAR
-            state.Action();
             state.OnExit();
             _lastState := state.GetStateId();
 
@@ -146,7 +144,6 @@ NAMESPACE Simatic.Ax.StateFramework
                 RETURN;
             END_IF;
             _status := StateControllerStatus#STATUS_IS_RUNNING;
-            // TODO action will be called after OnExit --> has to be changed
             _activeState.Action();
         END_METHOD
 

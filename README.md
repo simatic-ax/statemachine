@@ -20,6 +20,16 @@ Simatic.Ax.StateFramework
 
 ## StatemachineController
 
+### Lifecycle semantics
+
+The state controller executes the state lifecycle with the following order:
+
+- On the first activation of a state in a cycle, `OnEntry()` is called once and `Action()` is called in the same cycle.
+- If no transition is taken, the active state executes `Action()` on each `Execute()` call.
+- If a transition is taken, the current state executes `OnExit()` only. No additional `Action()` is called while leaving the state.
+- After a transition, the next state executes `OnEntry()` and then `Action()` in the same cycle.
+- `Restart()` terminates the current state with `OnExit()` and activates the initial state with `OnEntry()`. The initial state's `Action()` is executed on the next `Execute()` call.
+
 ### Class diagram
 
 ![img1](./docs/statecontroller.png)
