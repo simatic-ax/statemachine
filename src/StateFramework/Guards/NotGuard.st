@@ -5,6 +5,7 @@ NAMESPACE Simatic.Ax.StateFramework
         END_VAR
         
         METHOD PUBLIC Check : BOOL
+            // A missing child guard is treated as FALSE instead of TRUE.
             IF (Guard = NULL) THEN
                 Check := FALSE;
             ELSE
@@ -13,6 +14,7 @@ NAMESPACE Simatic.Ax.StateFramework
         END_METHOD
 
         METHOD PUBLIC Reset
+            // Reset is delegated to the wrapped guard.
             IF (Guard <> NULL) THEN
                 Guard.Reset();
             END_IF;

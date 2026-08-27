@@ -1,4 +1,5 @@
 NAMESPACE Simatic.Ax.StateFramework
+    // Runtime status of a state instance inside the controller.
     TYPE
         StateStatus : (
             IDLE,

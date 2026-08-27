@@ -6,6 +6,7 @@ NAMESPACE Simatic.Ax.StateFramework
         END_VAR
         
         METHOD PUBLIC Check : BOOL
+            // OR tolerates one missing side and evaluates the remaining guard.
             IF (Lhs = NULL) AND (Rhs = NULL) THEN
                 Check := FALSE;
             ELSIF (Lhs = NULL) THEN
@@ -18,6 +19,7 @@ NAMESPACE Simatic.Ax.StateFramework
         END_METHOD
 
         METHOD PUBLIC Reset
+            // Reset is forwarded to all configured child guards.
             IF (Lhs <> NULL) THEN
                 Lhs.Reset();
             END_IF;

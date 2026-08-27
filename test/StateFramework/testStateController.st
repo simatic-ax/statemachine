@@ -6,8 +6,10 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
     {TestFixture}
     CLASS StateControllerTest
         VAR
+            // Controller under test.
             sc : StateController;
             scStateLess : StateController;
+            // Test states used to model a simple three-state chain.
             is : InitialState;
             ns : NextState1;
             ls : LastState;
@@ -24,13 +26,14 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
             t2StateLess : Transition;
             t3StateLess : Transition;
             tNullStateLess : Transition;
+            // Shared BOOL guard input toggled by the tests.
             g1 : BoolGuard;
             b : BOOL;
         END_VAR
         
         {TestSetup}
         METHOD PUBLIC MyTestSetup
-            // Will be called before each test
+            // Rebuild a clean controller graph before each test.
             sc := scStateLess;
             is := isStateLess; 
             ns := nsStateLess; 
@@ -104,6 +107,7 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
         
            
         METHOD SetupStatemachine3States        
+            // Helper that wires a three-state chain including a terminal error transition.
             g1.Value := REF(b);
             
             // configure initial state
@@ -134,6 +138,54 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
             b := TRUE;
             sc.Execute();
             Equal2(expected := StateControllerStatus#STATUS_IS_RUNNING, actual := sc.GetState());
+        END_METHOD
+
+        {Test}
+        METHOD PUBLIC Execute_With_Missing_InitialState_Sets_Error
+            // A missing initial state is a configuration error and must latch immediately.
+            sc.InitialState := NULL;
+
+            sc.Execute();
+
+            Equal2(expected := StateControllerStatus#STATUS_NO_INITIALSTATE, actual := sc.GetState());
+        END_METHOD
+
+        {Test}
+        METHOD PUBLIC Execute_After_Error_Does_Not_Run_Again
+            // Once the controller is in an error state, later Execute calls must not recover implicitly.
+            sc.InitialState := NULL;
+            sc.Execute();
+
+            sc.InitialState := is;
+            sc.Execute();
+
+            Equal2(expected := StateControllerStatus#STATUS_NO_INITIALSTATE, actual := sc.GetState());
+            Equal(expected := 0, actual := is.OnEntryCount);
+            Equal(expected := 0, actual := is.ActionCount);
+        END_METHOD
+
+        {Test}
+        METHOD PUBLIC Transition_With_Null_NextState_Sets_Error
+            // A taken transition without a target state must stop execution with STATUS_NO_NEXTSTATE.
+            t1.NextState := NULL;
+            b := TRUE;
+
+            sc.Execute();
+
+            Equal2(expected := StateControllerStatus#STATUS_NO_NEXTSTATE, actual := sc.GetState());
+            Equal(expected := 1, actual := is.OnExitCount);
+            Equal(expected := 0, actual := ns.OnEntryCount1);
+        END_METHOD
+
+        {Test}
+        METHOD PUBLIC Transition_Sets_Previous_State_Idle_And_Next_State_Active
+            // After a successful transition, the old state must be idle and the new state active.
+            b := TRUE;
+
+            sc.Execute();
+
+            Equal(expected := TRUE, actual := is.GetStatus() = StateStatus#IDLE);
+            Equal(expected := TRUE, actual := ns.GetStatus() = StateStatus#ACTIVE);
         END_METHOD
    
 

@@ -19,6 +19,7 @@ NAMESPACE Simatic.Ax.StateFramework
                 g : IGuard;
                 ns : IState;
             END_VAR
+            // Config wires a guard and its target state in one call.
             Guard := g;
             NextState := ns;
         END_METHOD

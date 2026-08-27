@@ -5,6 +5,7 @@ NAMESPACE Simatic.Ax.StateFramework.Test
     {TestFixture}
     CLASS TestTransition2
         VAR
+            // State under test and reusable transition fixtures.
             state2 : State2Transition;
             state2StateLess : State2Transition;
             trans1 : Transition;
@@ -13,7 +14,7 @@ NAMESPACE Simatic.Ax.StateFramework.Test
 
         {TestSetup}
         METHOD PUBLIC MyTestSetup
-            // Will be called before each test
+            // Reset the state instance before each test.
             state2 := state2StateLess;
         END_METHOD
 

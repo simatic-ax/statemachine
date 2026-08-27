@@ -13,8 +13,11 @@ NAMESPACE Simatic.Ax.StateFramework
 
     CLASS CompareGuardLint IMPLEMENTS IGuard
         VAR PUBLIC
+            // Referenced runtime value that is compared against CompareToValue.
             Value : REF_TO LINT;
+            // Constant comparison target.
             CompareToValue : LINT;
+            // Selected comparison operator.
             Condition : Condition;
         END_VAR
         
@@ -24,14 +27,14 @@ NAMESPACE Simatic.Ax.StateFramework
                 compareValue : LINT;
                 compareCondition : Condition;                
             END_VAR
+            // Config stores the referenced value, threshold and comparison mode.
             Value := countValue;
             CompareToValue := compareValue;
             Condition := compareCondition;
         END_METHOD
         
-        // ---------------- IMPLEMENT IGuard---------------------------
         METHOD PUBLIC Check : BOOL
-
+            // The referenced value is evaluated with the configured comparison operator.
             CASE Condition OF
                 Condition#GT : Check := Value^ > CompareToValue;
                 Condition#EQ : Check := Value^ = CompareToValue;
@@ -44,9 +47,9 @@ NAMESPACE Simatic.Ax.StateFramework
         END_METHOD
 
         METHOD PUBLIC Reset
+            // CompareGuardLint is stateless and therefore does not need a reset action.
             ;
         END_METHOD
-        // ---------------- END IMPLEMENT IGuard---------------------------
 
 
     END_CLASS

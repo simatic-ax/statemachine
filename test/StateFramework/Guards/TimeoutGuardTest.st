@@ -1,3 +1,4 @@
+// Legacy timeout guard tests are kept disabled because the timer mock setup is not active in the current suite.
 // USING System.Timer;
 // USING Simatic.Ax.StateFramework;
 // USING AxUnit.Assert;

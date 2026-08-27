@@ -1,6 +1,4 @@
 NAMESPACE Simatic.Ax.StateFramework
-    // Named values for states
-    
     CLASS StateController IMPLEMENTS IStateController
 
         VAR PUBLIC
@@ -25,16 +23,18 @@ NAMESPACE Simatic.Ax.StateFramework
                 states : INT;
             END_VAR
 
+            // The controller cannot start without a configured entry state.
             IF (InitialState = NULL) THEN
                 _status := StateControllerStatus#STATUS_NO_INITIALSTATE;
                 RETURN;
             END_IF;
             
-            // dont execute if any error is active --> NULL Pointer execption
+            // Error states are latched and block further execution cycles.
             IF (THIS.HasError()) THEN
                 RETURN;
             END_IF;
             
+            // The first cycle activates the initial state before evaluating transitions.
             IF (_activeState = NULL) THEN
                 THIS.ActivateState(InitialState);
             END_IF;
@@ -46,6 +46,7 @@ NAMESPACE Simatic.Ax.StateFramework
 
         /// Terminates the actual state and start with the InitialState
         METHOD PUBLIC Restart : IState
+            // Restart terminates the current state and re-enters the configured initial state.
             IF (_activeState <> NULL) THEN
                 THIS.TerminateState(_activeState);
             END_IF;
@@ -71,10 +72,10 @@ NAMESPACE Simatic.Ax.StateFramework
             state.OnExit();
             _lastState := state.GetStateId();
 
-            // Reset all other guards
+            // Reset guards of the state that is being left so counters and timers start fresh.
             THIS.ResetGuards();
 
-            // Set status to Idle
+            // Mutable states are marked idle after OnExit has completed.
             _muetabaleState ?= state;
             IF (_muetabaleState <> NULL) THEN 
                 _muetabaleState.SetStatus(status := StateStatus#Idle);
@@ -92,13 +93,13 @@ NAMESPACE Simatic.Ax.StateFramework
             _status := StateControllerStatus#STATUS_STATE_CHANGED;
             _activeStateId := _activeState.GetStateId();
             _activeStateName := _activeState.GetStateName();           
-            // Call OnEntry method of new state
-                        // Set status to Idle
+            // Mutable states are marked active before OnEntry is called.
             _muetabaleState ?= state;
             IF (_muetabaleState <> NULL) THEN 
                 _muetabaleState.SetStatus(status := StateStatus#Active);
             END_IF;
             
+            // OnEntry is called exactly once per activation.
             _activeState.OnEntry();     
         END_METHOD
 
@@ -128,34 +129,35 @@ NAMESPACE Simatic.Ax.StateFramework
                     
                     IF (actualGuard.Check()) THEN
 
-                        // switchover state
+                        // The first guard that evaluates to TRUE wins the transition.
                         THIS.TerminateState(_activeState);
-                        // TODO write new state into list
                         nextState := actualTransition.GetNextState();
                         _activeState := nextState;
 
-                        // If no next state available, RETURN and set status to Error-Code --> state machine will not be executed
+                        // A taken transition without a target state is treated as a configuration error.
                         IF (_activeState = NULL) THEN
                             _status := StateControllerStatus#STATUS_NO_NEXTSTATE;
                             RETURN;
                         END_IF;
 
-                        // Activate State
+                        // The new state is entered immediately and may run its Action in the same cycle.
                         THIS.ActivateState(_activeState);
 
-                        // store active state (simple state logging)
                         EXIT; 
                     END_IF;                
                 END_FOR;
             ELSE
+                // States without outgoing transitions stop the controller with STATUS_NO_TRANSITION.
                 _status := StateControllerStatus#STATUS_NO_TRANSITION;
                 RETURN;
             END_IF;
+
+            // Action is executed after transition evaluation on the currently active state.
             _status := StateControllerStatus#STATUS_IS_RUNNING;
             _activeState.Action();
         END_METHOD
 
-        // Reset all Guards when one of the guards has Chack() = TRUE
+        // Reset all guards of the active state after a successful state change.
         METHOD PRIVATE ResetGuards
             VAR_TEMP
                 actualTransition : UINT;
@@ -178,6 +180,7 @@ NAMESPACE Simatic.Ax.StateFramework
         END_METHOD
 
         METHOD PRIVATE HasError : BOOL
+            // Error codes are encoded above 16#8000 in the status enum.
             IF (_status > WORD#16#8000) THEN
                 HasError := TRUE;
             ELSE
@@ -198,6 +201,7 @@ NAMESPACE Simatic.Ax.StateFramework
             VAR_INPUT
                 msg : String;
             END_VAR
+            // Logging is optional and only forwarded when a logger implementation is attached.
             IF (Logger <> NULL) THEN
                 Logger.WriteLog(msg);
             END_IF;

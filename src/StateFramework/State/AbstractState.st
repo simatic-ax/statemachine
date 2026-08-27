@@ -10,11 +10,8 @@ NAMESPACE Simatic.Ax.StateFramework
         VAR PROTECTED
              _actualStatus : StateStatus;
         END_VAR
-
-
-        // METHOD PUBLIC ABSTRACT OnEntry
-        // END_METHOD
         METHOD PUBLIC OnEntry
+            // The default entry behavior marks the state as active.
             _actualStatus := StateStatus#Active;
         END_METHOD
 
@@ -28,6 +25,7 @@ NAMESPACE Simatic.Ax.StateFramework
             VAR_INPUT 
                 pos : UINT;
             END_VAR
+            // The base implementation supports exactly one outgoing transition.
             IF (THIS.TransitionCount() = pos + UINT#1) THEN
                 GetTransition := transition1;
             ELSE
@@ -36,6 +34,7 @@ NAMESPACE Simatic.Ax.StateFramework
         END_METHOD
 
         METHOD PUBLIC TransitionCount : UINT
+            // A state either exposes its single configured transition or none.
             IF (transition1 <> NULL) THEN
                 TransitionCount := UINT#1;
             ELSE

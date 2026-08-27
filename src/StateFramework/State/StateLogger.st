@@ -1,15 +1,18 @@
 NAMESPACE Simatic.Ax.StateFramework
     CLASS StateLogger IMPLEMENTS ILogger
         VAR PUBLIC
+            // Public ring buffer that stores the most recent log messages.
             MsgBuffer : Array[0..BUF_SIZE - 1] OF LogMessage;
         END_VAR
         VAR PROTECTED
             
         END_VAR
         VAR PRIVATE
+            // Write position inside the ring buffer.
             _pos : INT;
         END_VAR
         VAR CONSTANT PRIVATE
+            // Maximum number of log entries kept in memory.
             BUF_SIZE : INT := 100;
         END_VAR
 
@@ -22,6 +25,7 @@ NAMESPACE Simatic.Ax.StateFramework
                 _data : REF_TO LogMessage;
                 _timestamp : DATE_AND_TIME;
             END_VAR
+            // The current slot is overwritten and the write position advances circularly.
             _data := REF(MsgBuffer[_pos]);
             _data^.message := message;
             _data^.timestamp := _timestamp;        
@@ -31,6 +35,7 @@ NAMESPACE Simatic.Ax.StateFramework
     END_CLASS
 
     TYPE
+        // One buffered log entry with payload and timestamp field.
         LogMessage : STRUCT
             timestamp : DATE_AND_TIME;
             message : STRING;

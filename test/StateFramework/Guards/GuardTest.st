@@ -7,13 +7,14 @@ NAMESPACE Simatic.Ax.StateFramework.Test
     {TestFixture}
     CLASS CountGuardTest
         VAR
+            // Guard instance under test and a stateless template for reset between tests.
             _guard : Simatic.Ax.StateFramework.CountGuard;
             _guardStateless : Simatic.Ax.StateFramework.CountGuard;
         END_VAR
 
         {TestSetup}
         METHOD PUBLIC MyTestSetup
-            // Will be called before each test
+            // Reset the guard instance before each test case.
             _guard := _guardStateless;
         END_METHOD
 
@@ -39,6 +40,7 @@ NAMESPACE Simatic.Ax.StateFramework.Test
     {TestFixture}
     CLASS TrueGuardTest
         VAR
+            // Guard instance under test.
             _guard : TrueGuard;
         END_VAR
 
@@ -56,6 +58,7 @@ NAMESPACE Simatic.Ax.StateFramework.Test
     {TestFixture}
     CLASS BoolGuardTest
         VAR
+            // Guard instance and referenced BOOL value under test.
             _guard : BoolGuard;
             _value : BOOL;
         END_VAR
@@ -91,6 +94,7 @@ NAMESPACE Simatic.Ax.StateFramework.Test
     {TestFixture}
     CLASS AndGuardTest
         VAR
+            // Composite guard with two BOOL-backed child guards.
             _guard : AndGuard;
             _bg1 : BoolGuard;
             _bg2 : BoolGuard;
@@ -143,6 +147,7 @@ NAMESPACE Simatic.Ax.StateFramework.Test
     {TestFixture}
     CLASS OrGuardTest
         VAR
+            // Composite guard with two BOOL-backed child guards.
             _guard : OrGuard;
             _bg1 : BoolGuard;
             _bg2 : BoolGuard;
@@ -194,6 +199,7 @@ NAMESPACE Simatic.Ax.StateFramework.Test
     {TestFixture}
     CLASS XorGuardTest
         VAR
+            // Composite guard with two BOOL-backed child guards.
             _guard : XorGuard;
             _bg1 : BoolGuard;
             _bg2 : BoolGuard;
@@ -245,6 +251,7 @@ NAMESPACE Simatic.Ax.StateFramework.Test
     {TestFixture}
     CLASS NotGuardTest
         VAR
+            // Inverting guard with one BOOL-backed child guard.
             _guard : NotGuard;
             _bg1 : BoolGuard;
             _b1 : BOOL;
@@ -284,6 +291,7 @@ NAMESPACE Simatic.Ax.StateFramework.Test
     {TestFixture}
     CLASS CompareGuardTest
         VAR
+            // Compare guard with mutable input and threshold values.
             _guard : CompareGuardLint;
             _compareToValue : LINT;
             _value : LINT;
