@@ -6,34 +6,43 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
     {TestFixture}
     CLASS StateControllerTest
         VAR
+            // Controller under test.
             sc : StateController;
             scStateLess : StateController;
+            // Test states used to model a simple three-state chain.
             is : InitialState;
             ns : NextState1;
             ls : LastState;
+            nullGuardState : InitialState;
             isStateLess : InitialState := (StateName := 'Initial State');
             nsStateLess : NextState1 := (StateName := 'Next State');
             lsStateLess : LastState := (StateName := 'Last State');
+            nullGuardStateLess : InitialState := (StateName := 'Null Guard State');
             t1 : Transition;
             t2 : Transition;
             t3 : Transition;
+            tNull : Transition;
             t1StateLess : Transition;
             t2StateLess : Transition;
             t3StateLess : Transition;
+            tNullStateLess : Transition;
+            // Shared BOOL guard input toggled by the tests.
             g1 : BoolGuard;
             b : BOOL;
         END_VAR
         
         {TestSetup}
         METHOD PUBLIC MyTestSetup
-            // Will be called before each test
+            // Rebuild a clean controller graph before each test.
             sc := scStateLess;
             is := isStateLess; 
             ns := nsStateLess; 
             ls := lsStateLess;
+            nullGuardState := nullGuardStateLess;
             t1 := t1StateLess;
             t2 := t2StateLess;
             t3 := t3StateLess;
+            tNull := tNullStateLess;
 
             b := FALSE;
             g1.Value := REF(b);
@@ -76,15 +85,29 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
             sc.Execute();
             Equal(expected := 1, actual := is.OnEntryCount);
             Equal(expected := 1, actual := is.OnExitCount);
-            Equal(expected := 3, actual := is.ActionCount);
+            Equal(expected := 2, actual := is.ActionCount);
             Equal(expected := 1, actual := ns.OnEntryCount1);
             Equal(expected := 0, actual := ns.OnExitCount1);
             Equal(expected := 1, actual := ns.ActionCount1);
             ;
         END_METHOD
+
+        {Test}
+        METHOD PUBLIC Transition_Does_Not_Call_Action_On_Leaving_State
+            sc.Execute();
+            b := TRUE;
+
+            sc.Execute();
+
+            Equal(expected := 1, actual := is.OnExitCount);
+            Equal(expected := 1, actual := ns.OnEntryCount1);
+            Equal(expected := 1, actual := is.ActionCount);
+            Equal(expected := 1, actual := ns.ActionCount1);
+        END_METHOD
         
            
         METHOD SetupStatemachine3States        
+            // Helper that wires a three-state chain including a terminal error transition.
             g1.Value := REF(b);
             
             // configure initial state
@@ -116,6 +139,73 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
             sc.Execute();
             Equal2(expected := StateControllerStatus#STATUS_IS_RUNNING, actual := sc.GetState());
         END_METHOD
+
+        {Test}
+        METHOD PUBLIC Execute_With_Missing_InitialState_Sets_Error
+            // A missing initial state is a configuration error and must latch immediately.
+            sc.InitialState := NULL;
+
+            sc.Execute();
+
+            Equal2(expected := StateControllerStatus#STATUS_NO_INITIALSTATE, actual := sc.GetState());
+        END_METHOD
+
+        {Test}
+        METHOD PUBLIC First_Execute_Marks_Initial_State_Active_Before_Action
+            sc.Execute();
+
+            Equal(expected := TRUE, actual := is.GetStatus() = StateStatus#Active);
+            Equal(expected := 1, actual := is.OnEntryCount);
+            Equal(expected := 1, actual := is.ActionCount);
+            Equal(expected := FALSE, actual := is.ActionBeforeOnEntry);
+        END_METHOD
+
+        {Test}
+        METHOD PUBLIC First_Execute_Does_Not_Activate_Next_State_Without_Transition
+            sc.Execute();
+
+            Equal(expected := TRUE, actual := ns.GetStatus() <> StateStatus#Active);
+            Equal(expected := 0, actual := ns.OnEntryCount1);
+            Equal(expected := 0, actual := ns.ActionCount1);
+        END_METHOD
+
+        {Test}
+        METHOD PUBLIC Execute_After_Error_Does_Not_Run_Again
+            // Once the controller is in an error state, later Execute calls must not recover implicitly.
+            sc.InitialState := NULL;
+            sc.Execute();
+
+            sc.InitialState := is;
+            sc.Execute();
+
+            Equal2(expected := StateControllerStatus#STATUS_NO_INITIALSTATE, actual := sc.GetState());
+            Equal(expected := 0, actual := is.OnEntryCount);
+            Equal(expected := 0, actual := is.ActionCount);
+        END_METHOD
+
+        {Test}
+        METHOD PUBLIC Transition_With_Null_NextState_Sets_Error
+            // A taken transition without a target state must stop execution with STATUS_NO_NEXTSTATE.
+            t1.NextState := NULL;
+            b := TRUE;
+
+            sc.Execute();
+
+            Equal2(expected := StateControllerStatus#STATUS_NO_NEXTSTATE, actual := sc.GetState());
+            Equal(expected := 1, actual := is.OnExitCount);
+            Equal(expected := 0, actual := ns.OnEntryCount1);
+        END_METHOD
+
+        {Test}
+        METHOD PUBLIC Transition_Sets_Previous_State_Idle_And_Next_State_Active
+            // After a successful transition, the old state must be idle and the new state active.
+            b := TRUE;
+
+            sc.Execute();
+
+            Equal(expected := TRUE, actual := is.GetStatus() = StateStatus#IDLE);
+            Equal(expected := TRUE, actual := ns.GetStatus() = StateStatus#ACTIVE);
+        END_METHOD
    
 
         {Test}
@@ -142,6 +232,41 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
         END_METHOD                
 
         {Test}
+        METHOD PUBLIC Restart_Calls_OnEntry_But_Defers_Action_To_Next_Execute
+            sc.Execute();
+            b := TRUE;
+            sc.Execute();
+
+            b := FALSE;
+            sc.Restart();
+
+            Equal(expected := 'Initial State', actual := sc.GetActiveStateName());
+            Equal(expected := 2, actual := is.OnEntryCount);
+            Equal(expected := 1, actual := is.OnExitCount);
+            Equal(expected := 1, actual := is.ActionCount);
+
+            sc.Execute();
+
+            Equal(expected := 2, actual := is.ActionCount);
+        END_METHOD
+
+        {Test}
+        METHOD PUBLIC Restart_Reactivates_Initial_State_Immediately
+            sc.Execute();
+            b := TRUE;
+            sc.Execute();
+
+            b := FALSE;
+            sc.Restart();
+
+            Equal(expected := TRUE, actual := is.GetStatus() = StateStatus#Active);
+            Equal(expected := TRUE, actual := ns.GetStatus() = StateStatus#Idle);
+            Equal(expected := 2, actual := is.OnEntryCount);
+            Equal(expected := 1, actual := is.OnExitCount);
+            Equal(expected := 1, actual := ns.OnExitCount1);
+        END_METHOD
+
+        {Test}
         METHOD PUBLIC States_where_all_transitions_are_true_passed_in_two_cycles
             // 1. Cycle
             b := TRUE; // Transition to nextState = TRUE
@@ -151,6 +276,32 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
             Equal(expected := 'Last State', actual := sc.GetActiveStateName());
             Equal(expected := TRUE, actual := ls.GetStatus() = StateStatus#Active);
         END_METHOD    
+
+        {Test}
+        METHOD PUBLIC Null_Guard_Transition_Is_Ignored
+            nullGuardState.Transition1 := tNull;
+            tNull.Guard := NULL;
+            tNull.NextState := ns;
+            sc.InitialState := nullGuardState;
+
+            sc.Execute();
+            sc.Execute();
+
+            Equal(expected := 'Null Guard State', actual := sc.GetActiveStateName());
+            Equal2(expected := StateControllerStatus#STATUS_IS_RUNNING, actual := sc.GetState());
+        END_METHOD
+
+        {Test}
+        METHOD PUBLIC ResetGuards_Ignores_Null_Guard_References
+            nullGuardState.Transition1 := tNull;
+            tNull.Guard := NULL;
+            tNull.NextState := ns;
+            sc.InitialState := nullGuardState;
+
+            sc.Restart();
+
+            Equal(expected := 'Null Guard State', actual := sc.GetActiveStateName());
+        END_METHOD
 
     END_CLASS
 

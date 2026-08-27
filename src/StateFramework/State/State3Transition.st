@@ -2,22 +2,28 @@ USING Simatic.Ax.Stateframework;
 
 NAMESPACE Simatic.Ax.StateFramework
 
+    // Convenience base state for up to three outgoing transitions.
     CLASS State3Transition EXTENDS AbstractState
 
         VAR PUBLIC
+            // Optional second outgoing transition.
             Transition2 : ITransition;
+            // Optional third outgoing transition.
             Transition3 : ITransition;
         END_VAR
 
         METHOD PUBLIC OVERRIDE OnEntry
+            // Default implementation intentionally does nothing.
             ;
         END_METHOD
 
         METHOD PUBLIC OVERRIDE OnExit
+            // Default implementation intentionally does nothing.
             ;
         END_METHOD
 
         METHOD PUBLIC OVERRIDE Action
+            // Default implementation intentionally does nothing.
             ;
         END_METHOD
 
@@ -36,7 +42,7 @@ NAMESPACE Simatic.Ax.StateFramework
                 RETURN;
             END_IF;
 
-            // If just one Transition configured
+            // With only one configured transition, the populated slot is returned as index 0.
             IF (cnt = UINT#1) THEN
                 IF (transition1 <> NULL) THEN
                     GetTransition := transition1;
@@ -59,6 +65,7 @@ NAMESPACE Simatic.Ax.StateFramework
         END_METHOD
 
         METHOD PUBLIC FINAL OVERRIDE TransitionCount : UINT
+            // Counts how many of the three transition slots are populated.
             IF (transition1 = NULL AND transition2 = NULL AND transition3 = NULL) THEN
                 TransitionCount := UINT#0;
             ELSIF (transition1 <> NULL AND transition2 <> NULL AND transition3 <> NULL) THEN

@@ -11,12 +11,22 @@ NAMESPACE Simatic.Ax.StateFramework
         END_VAR
         
         METHOD PUBLIC Check : BOOL
-            Check := Lhs.Check() AND Rhs.Check();
+            // Both child guards must exist and evaluate to TRUE.
+            IF (Lhs = NULL) OR (Rhs = NULL) THEN
+                Check := FALSE;
+            ELSE
+                Check := Lhs.Check() AND Rhs.Check();
+            END_IF;
         END_METHOD
 
         METHOD PUBLIC Reset
-            Lhs.Reset();
-            Rhs.Reset();
+            // Reset is forwarded to both child guards when present.
+            IF (Lhs <> NULL) THEN
+                Lhs.Reset();
+            END_IF;
+            IF (Rhs <> NULL) THEN
+                Rhs.Reset();
+            END_IF;
         END_METHOD
 
     END_CLASS

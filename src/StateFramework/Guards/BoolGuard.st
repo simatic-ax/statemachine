@@ -8,10 +8,16 @@ NAMESPACE Simatic.Ax.StateFramework
         END_VAR
         
         METHOD PUBLIC Check : BOOL
-            Check := Value^;
+            // A missing BOOL reference is treated as FALSE.
+            IF (Value = NULL) THEN
+                Check := FALSE;
+            ELSE
+                Check := Value^;
+            END_IF;
         END_METHOD
 
         METHOD PUBLIC Reset
+            // BoolGuard is level-based and therefore has no internal state to reset.
             ;
         END_METHOD
 

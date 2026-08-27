@@ -14,12 +14,13 @@ NAMESPACE Simatic.Ax.StateFramework
             VAR_INPUT
                 timeoutValue : TIME;
             END_VAR
+            // Timeout defines the TON duration that must elapse before Check returns TRUE.
             Timeout := timeoutValue;
         END_METHOD
 
 
-        // ---------------- IMPLEMENT IGuard---------------------------
         METHOD PUBLIC Check : BOOL
+            // The timer is driven continuously until the configured delay has elapsed.
             _ton(signal := TRUE, duration := Timeout);
             IF (_ton.output) THEN
                  Check := TRUE;
@@ -29,9 +30,9 @@ NAMESPACE Simatic.Ax.StateFramework
         END_METHOD
 
         METHOD PUBLIC Reset
+            // Reset drops the TON input so the timeout starts from zero on the next Check.
             _ton(signal:= FALSE);
         END_METHOD
-        // ---------------- END IMPLEMENT IGuard---------------------------
 
     END_CLASS
 END_NAMESPACE

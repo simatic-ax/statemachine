@@ -1,4 +1,5 @@
 NAMESPACE Simatic.Ax.StateFramework
+    // Status and error codes reported by the state controller.
     TYPE
         StateControllerStatus : WORD (
             STATUS_NO_ERR := WORD#16#7000,

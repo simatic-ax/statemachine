@@ -12,11 +12,12 @@ NAMESPACE Simatic.Ax.StateFramework
             VAR_INPUT
                 countValue : LINT;
             END_VAR
+            // Count defines after how many Check calls the guard becomes TRUE once.
             Count := countValue;
         END_METHOD
 
-        // ---------------- IMPLEMENT IGuard---------------------------
         METHOD PUBLIC Check : BOOL
+            // The counter is incremented on every evaluation and resets after firing.
             _actCount := _actCount + LINT#1;
             IF (_actCount >= Count) THEN                
                 _actCount := LINT#0;
@@ -28,9 +29,9 @@ NAMESPACE Simatic.Ax.StateFramework
         END_METHOD
 
         METHOD PUBLIC Reset
+            // CountGuard keeps counting across cycles until it fires.
             ;
         END_METHOD
-        // ---------------- END IMPLEMENT IGuard---------------------------
 
     END_CLASS
 

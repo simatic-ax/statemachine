@@ -1,6 +1,7 @@
 USING System.Timer;
 
 NAMESPACE Simatic.Ax.StatePattern
+    // Legacy controller from the deprecated state pattern implementation.
     CLASS PUBLIC StateContext
         VAR PUBLIC
 
@@ -20,6 +21,7 @@ NAMESPACE Simatic.Ax.StatePattern
                 reset : BOOL;
             END_VAR
 
+            // The initial state is only applied once unless reset is requested explicitly.
             IF (newState <> NULL) THEN
                 IF (NOT _first OR reset) THEN
                     THIS.setState(newState := newState, timeout := timeout);
@@ -38,7 +40,7 @@ NAMESPACE Simatic.Ax.StatePattern
                 timeout : TIME;
             END_VAR
             
-            // before change state, call the on Entry method
+            // Before switching states, the current state receives OnExit.
             IF (_state <> NULL) THEN
                 _state.OnExit(context := REF(THIS));
             END_IF;
@@ -47,10 +49,10 @@ NAMESPACE Simatic.Ax.StatePattern
                 _state := newState;
                 _status.isRunning := TRUE;
                 
-                // call the OnEntry method once
+                // The new state is entered once immediately after activation.
                 _state.onEntry(context := REF(THIS));
                 
-                // run the Timeout if configured
+                // A positive timeout arms the legacy TON instance.
                 IF (timeout > T#0ms) THEN
                     _ton.duration := timeout;
                     _ton.signal := TRUE;
@@ -62,12 +64,14 @@ NAMESPACE Simatic.Ax.StatePattern
     
 
         METHOD PUBLIC FINAL Execute
+            // No execution happens until an initial state has been configured.
             IF (_state = NULL) THEN
                 RETURN;
             END_IF;
             _count := _count + 1;
             _ton();
 
+            // Timeout handling is evaluated before the regular Execute call.
             IF (_ton.output) THEN
                 _ton.signal := FALSE;
                 _ton();

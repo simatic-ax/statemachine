@@ -7,13 +7,14 @@ NAMESPACE Simatic.Ax.StateFramework.Test
     {TestFixture}
     CLASS CountGuardTest
         VAR
+            // Guard instance under test and a stateless template for reset between tests.
             _guard : Simatic.Ax.StateFramework.CountGuard;
             _guardStateless : Simatic.Ax.StateFramework.CountGuard;
         END_VAR
 
         {TestSetup}
         METHOD PUBLIC MyTestSetup
-            // Will be called before each test
+            // Reset the guard instance before each test case.
             _guard := _guardStateless;
         END_METHOD
 
@@ -39,6 +40,7 @@ NAMESPACE Simatic.Ax.StateFramework.Test
     {TestFixture}
     CLASS TrueGuardTest
         VAR
+            // Guard instance under test.
             _guard : TrueGuard;
         END_VAR
 
@@ -56,9 +58,18 @@ NAMESPACE Simatic.Ax.StateFramework.Test
     {TestFixture}
     CLASS BoolGuardTest
         VAR
+            // Guard instance and referenced BOOL value under test.
             _guard : BoolGuard;
             _value : BOOL;
         END_VAR
+
+        {Test}
+        METHOD PUBLIC BoolGuard_ExpectFalse_WhenValueRefIsNull
+            _guard.Value := NULL;
+            Equal(actual := _guard.Check(), expected := FALSE);
+            _guard.Reset();
+            Equal(actual := _guard.Check(), expected := FALSE);
+        END_METHOD
 
         {Test}
         METHOD PUBLIC BoolGuard_ExpectFalse_WhenValueFalse
@@ -83,6 +94,7 @@ NAMESPACE Simatic.Ax.StateFramework.Test
     {TestFixture}
     CLASS AndGuardTest
         VAR
+            // Composite guard with two BOOL-backed child guards.
             _guard : AndGuard;
             _bg1 : BoolGuard;
             _bg2 : BoolGuard;
@@ -118,11 +130,24 @@ NAMESPACE Simatic.Ax.StateFramework.Test
             Equal(actual := _guard.Check(), expected := _q);
         END_METHOD
 
+        {Test}
+        METHOD PUBLIC AndGuard_ExpectFalse_WhenOneSideIsNull
+            _b1 := TRUE;
+            _bg1.Value := REF(_b1);
+            _guard.Lhs := _bg1;
+            _guard.Rhs := NULL;
+
+            Equal(actual := _guard.Check(), expected := FALSE);
+            _guard.Reset();
+            Equal(actual := _guard.Check(), expected := FALSE);
+        END_METHOD
+
     END_CLASS
 
     {TestFixture}
     CLASS OrGuardTest
         VAR
+            // Composite guard with two BOOL-backed child guards.
             _guard : OrGuard;
             _bg1 : BoolGuard;
             _bg2 : BoolGuard;
@@ -157,11 +182,24 @@ NAMESPACE Simatic.Ax.StateFramework.Test
             _guard.Reset();
             Equal(actual := _guard.Check(), expected := _q);
         END_METHOD
+
+        {Test}
+        METHOD PUBLIC OrGuard_UsesConfiguredSide_WhenOtherSideIsNull
+            _b1 := TRUE;
+            _bg1.Value := REF(_b1);
+            _guard.Lhs := _bg1;
+            _guard.Rhs := NULL;
+
+            Equal(actual := _guard.Check(), expected := TRUE);
+            _guard.Reset();
+            Equal(actual := _guard.Check(), expected := TRUE);
+        END_METHOD
     END_CLASS
 
     {TestFixture}
     CLASS XorGuardTest
         VAR
+            // Composite guard with two BOOL-backed child guards.
             _guard : XorGuard;
             _bg1 : BoolGuard;
             _bg2 : BoolGuard;
@@ -196,11 +234,24 @@ NAMESPACE Simatic.Ax.StateFramework.Test
             _guard.Reset();
             Equal(actual := _guard.Check(), expected := _q);
         END_METHOD
+
+        {Test}
+        METHOD PUBLIC XorGuard_UsesConfiguredSide_WhenOtherSideIsNull
+            _b1 := TRUE;
+            _bg1.Value := REF(_b1);
+            _guard.Lhs := _bg1;
+            _guard.Rhs := NULL;
+
+            Equal(actual := _guard.Check(), expected := TRUE);
+            _guard.Reset();
+            Equal(actual := _guard.Check(), expected := TRUE);
+        END_METHOD
     END_CLASS
 
     {TestFixture}
     CLASS NotGuardTest
         VAR
+            // Inverting guard with one BOOL-backed child guard.
             _guard : NotGuard;
             _bg1 : BoolGuard;
             _b1 : BOOL;
@@ -226,11 +277,21 @@ NAMESPACE Simatic.Ax.StateFramework.Test
             _guard.Reset();
             Equal(actual := _guard.Check(), expected := _q);
         END_METHOD
+
+        {Test}
+        METHOD PUBLIC NotGuard_ExpectFalse_WhenGuardIsNull
+            _guard.Guard := NULL;
+
+            Equal(actual := _guard.Check(), expected := FALSE);
+            _guard.Reset();
+            Equal(actual := _guard.Check(), expected := FALSE);
+        END_METHOD
     END_CLASS
 
     {TestFixture}
     CLASS CompareGuardTest
         VAR
+            // Compare guard with mutable input and threshold values.
             _guard : CompareGuardLint;
             _compareToValue : LINT;
             _value : LINT;
