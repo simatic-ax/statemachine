@@ -151,6 +151,25 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
         END_METHOD
 
         {Test}
+        METHOD PUBLIC First_Execute_Marks_Initial_State_Active_Before_Action
+            sc.Execute();
+
+            Equal(expected := TRUE, actual := is.GetStatus() = StateStatus#Active);
+            Equal(expected := 1, actual := is.OnEntryCount);
+            Equal(expected := 1, actual := is.ActionCount);
+            Equal(expected := FALSE, actual := is.ActionBeforeOnEntry);
+        END_METHOD
+
+        {Test}
+        METHOD PUBLIC First_Execute_Does_Not_Activate_Next_State_Without_Transition
+            sc.Execute();
+
+            Equal(expected := TRUE, actual := ns.GetStatus() <> StateStatus#Active);
+            Equal(expected := 0, actual := ns.OnEntryCount1);
+            Equal(expected := 0, actual := ns.ActionCount1);
+        END_METHOD
+
+        {Test}
         METHOD PUBLIC Execute_After_Error_Does_Not_Run_Again
             // Once the controller is in an error state, later Execute calls must not recover implicitly.
             sc.InitialState := NULL;
@@ -229,6 +248,22 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
             sc.Execute();
 
             Equal(expected := 2, actual := is.ActionCount);
+        END_METHOD
+
+        {Test}
+        METHOD PUBLIC Restart_Reactivates_Initial_State_Immediately
+            sc.Execute();
+            b := TRUE;
+            sc.Execute();
+
+            b := FALSE;
+            sc.Restart();
+
+            Equal(expected := TRUE, actual := is.GetStatus() = StateStatus#Active);
+            Equal(expected := TRUE, actual := ns.GetStatus() = StateStatus#Idle);
+            Equal(expected := 2, actual := is.OnEntryCount);
+            Equal(expected := 1, actual := is.OnExitCount);
+            Equal(expected := 1, actual := ns.OnExitCount1);
         END_METHOD
 
         {Test}

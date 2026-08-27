@@ -10,9 +10,8 @@ NAMESPACE Simatic.Ax.StateFramework
         VAR PROTECTED
              _actualStatus : StateStatus;
         END_VAR
-        METHOD PUBLIC OnEntry
-            // The default entry behavior marks the state as active.
-            _actualStatus := StateStatus#Active;
+
+        METHOD PUBLIC ABSTRACT OnEntry
         END_METHOD
 
         METHOD PUBLIC ABSTRACT OnExit

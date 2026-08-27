@@ -99,7 +99,7 @@ NAMESPACE Simatic.Ax.StateFramework
                 _muetabaleState.SetStatus(status := StateStatus#Active);
             END_IF;
             
-            // OnEntry is called exactly once per activation.
+            // OnEntry is called exactly once per activation after the controller has marked the state active.
             _activeState.OnEntry();     
         END_METHOD
 
