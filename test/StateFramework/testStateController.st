@@ -11,15 +11,19 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
             is : InitialState;
             ns : NextState1;
             ls : LastState;
+            nullGuardState : InitialState;
             isStateLess : InitialState := (StateName := 'Initial State');
             nsStateLess : NextState1 := (StateName := 'Next State');
             lsStateLess : LastState := (StateName := 'Last State');
+            nullGuardStateLess : InitialState := (StateName := 'Null Guard State');
             t1 : Transition;
             t2 : Transition;
             t3 : Transition;
+            tNull : Transition;
             t1StateLess : Transition;
             t2StateLess : Transition;
             t3StateLess : Transition;
+            tNullStateLess : Transition;
             g1 : BoolGuard;
             b : BOOL;
         END_VAR
@@ -31,9 +35,11 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
             is := isStateLess; 
             ns := nsStateLess; 
             ls := lsStateLess;
+            nullGuardState := nullGuardStateLess;
             t1 := t1StateLess;
             t2 := t2StateLess;
             t3 := t3StateLess;
+            tNull := tNullStateLess;
 
             b := FALSE;
             g1.Value := REF(b);
@@ -183,6 +189,32 @@ NAMESPACE Simatic.Ax.StateFramework.TestStateController
             Equal(expected := 'Last State', actual := sc.GetActiveStateName());
             Equal(expected := TRUE, actual := ls.GetStatus() = StateStatus#Active);
         END_METHOD    
+
+        {Test}
+        METHOD PUBLIC Null_Guard_Transition_Is_Ignored
+            nullGuardState.Transition1 := tNull;
+            tNull.Guard := NULL;
+            tNull.NextState := ns;
+            sc.InitialState := nullGuardState;
+
+            sc.Execute();
+            sc.Execute();
+
+            Equal(expected := 'Null Guard State', actual := sc.GetActiveStateName());
+            Equal2(expected := StateControllerStatus#STATUS_IS_RUNNING, actual := sc.GetState());
+        END_METHOD
+
+        {Test}
+        METHOD PUBLIC ResetGuards_Ignores_Null_Guard_References
+            nullGuardState.Transition1 := tNull;
+            tNull.Guard := NULL;
+            tNull.NextState := ns;
+            sc.InitialState := nullGuardState;
+
+            sc.Restart();
+
+            Equal(expected := 'Null Guard State', actual := sc.GetActiveStateName());
+        END_METHOD
 
     END_CLASS
 

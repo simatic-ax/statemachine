@@ -61,6 +61,14 @@ NAMESPACE Simatic.Ax.StateFramework.Test
         END_VAR
 
         {Test}
+        METHOD PUBLIC BoolGuard_ExpectFalse_WhenValueRefIsNull
+            _guard.Value := NULL;
+            Equal(actual := _guard.Check(), expected := FALSE);
+            _guard.Reset();
+            Equal(actual := _guard.Check(), expected := FALSE);
+        END_METHOD
+
+        {Test}
         METHOD PUBLIC BoolGuard_ExpectFalse_WhenValueFalse
             _guard.Value := REF(_value);
             _value := FALSE;
@@ -118,6 +126,18 @@ NAMESPACE Simatic.Ax.StateFramework.Test
             Equal(actual := _guard.Check(), expected := _q);
         END_METHOD
 
+        {Test}
+        METHOD PUBLIC AndGuard_ExpectFalse_WhenOneSideIsNull
+            _b1 := TRUE;
+            _bg1.Value := REF(_b1);
+            _guard.Lhs := _bg1;
+            _guard.Rhs := NULL;
+
+            Equal(actual := _guard.Check(), expected := FALSE);
+            _guard.Reset();
+            Equal(actual := _guard.Check(), expected := FALSE);
+        END_METHOD
+
     END_CLASS
 
     {TestFixture}
@@ -156,6 +176,18 @@ NAMESPACE Simatic.Ax.StateFramework.Test
             Equal(actual := _guard.Check(), expected := _q);
             _guard.Reset();
             Equal(actual := _guard.Check(), expected := _q);
+        END_METHOD
+
+        {Test}
+        METHOD PUBLIC OrGuard_UsesConfiguredSide_WhenOtherSideIsNull
+            _b1 := TRUE;
+            _bg1.Value := REF(_b1);
+            _guard.Lhs := _bg1;
+            _guard.Rhs := NULL;
+
+            Equal(actual := _guard.Check(), expected := TRUE);
+            _guard.Reset();
+            Equal(actual := _guard.Check(), expected := TRUE);
         END_METHOD
     END_CLASS
 
@@ -196,6 +228,18 @@ NAMESPACE Simatic.Ax.StateFramework.Test
             _guard.Reset();
             Equal(actual := _guard.Check(), expected := _q);
         END_METHOD
+
+        {Test}
+        METHOD PUBLIC XorGuard_UsesConfiguredSide_WhenOtherSideIsNull
+            _b1 := TRUE;
+            _bg1.Value := REF(_b1);
+            _guard.Lhs := _bg1;
+            _guard.Rhs := NULL;
+
+            Equal(actual := _guard.Check(), expected := TRUE);
+            _guard.Reset();
+            Equal(actual := _guard.Check(), expected := TRUE);
+        END_METHOD
     END_CLASS
 
     {TestFixture}
@@ -225,6 +269,15 @@ NAMESPACE Simatic.Ax.StateFramework.Test
             Equal(actual := _guard.Check(), expected := _q);
             _guard.Reset();
             Equal(actual := _guard.Check(), expected := _q);
+        END_METHOD
+
+        {Test}
+        METHOD PUBLIC NotGuard_ExpectFalse_WhenGuardIsNull
+            _guard.Guard := NULL;
+
+            Equal(actual := _guard.Check(), expected := FALSE);
+            _guard.Reset();
+            Equal(actual := _guard.Check(), expected := FALSE);
         END_METHOD
     END_CLASS
 

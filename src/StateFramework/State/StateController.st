@@ -109,6 +109,8 @@ NAMESPACE Simatic.Ax.StateFramework
             VAR_TEMP
                 transition : UINT;
                 actualTransition : ITransition;
+                actualGuard : IGuard;
+                nextState : IState;
             END_VAR
 
             IF (_activeState.TransitionCount() > UINT#0) THEN 
@@ -118,13 +120,19 @@ NAMESPACE Simatic.Ax.StateFramework
                     IF (actualTransition = NULL) THEN
                         CONTINUE;
                     END_IF;
+
+                    actualGuard := actualTransition.GetGuard();
+                    IF (actualGuard = NULL) THEN
+                        CONTINUE;
+                    END_IF;
                     
-                    IF (actualTransition.GetGuard().Check()) THEN
+                    IF (actualGuard.Check()) THEN
 
                         // switchover state
                         THIS.TerminateState(_activeState);
                         // TODO write new state into list
-                        _activeState := actualTransition.GetNextState();
+                        nextState := actualTransition.GetNextState();
+                        _activeState := nextState;
 
                         // If no next state available, RETURN and set status to Error-Code --> state machine will not be executed
                         IF (_activeState = NULL) THEN
@@ -151,10 +159,20 @@ NAMESPACE Simatic.Ax.StateFramework
         METHOD PRIVATE ResetGuards
             VAR_TEMP
                 actualTransition : UINT;
+                transitionRef : ITransition;
+                guardRef : IGuard;
             END_VAR
             IF (_activeState.TransitionCount() > UINT#0) THEN 
                 FOR actualTransition := UINT#0 TO _activeState.TransitionCount() - UINT#1 DO
-                    _activeState.GetTransition(pos := actualTransition).GetGuard().Reset();
+                    transitionRef := _activeState.GetTransition(pos := actualTransition);
+                    IF (transitionRef = NULL) THEN
+                        CONTINUE;
+                    END_IF;
+
+                    guardRef := transitionRef.GetGuard();
+                    IF (guardRef <> NULL) THEN
+                        guardRef.Reset();
+                    END_IF;
                 END_FOR;
             END_IF;
         END_METHOD

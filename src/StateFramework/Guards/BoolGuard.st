@@ -8,7 +8,11 @@ NAMESPACE Simatic.Ax.StateFramework
         END_VAR
         
         METHOD PUBLIC Check : BOOL
-            Check := Value^;
+            IF (Value = NULL) THEN
+                Check := FALSE;
+            ELSE
+                Check := Value^;
+            END_IF;
         END_METHOD
 
         METHOD PUBLIC Reset

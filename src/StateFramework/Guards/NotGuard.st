@@ -5,11 +5,17 @@ NAMESPACE Simatic.Ax.StateFramework
         END_VAR
         
         METHOD PUBLIC Check : BOOL
-            Check := NOT(Guard.Check());
+            IF (Guard = NULL) THEN
+                Check := FALSE;
+            ELSE
+                Check := NOT(Guard.Check());
+            END_IF;
         END_METHOD
 
         METHOD PUBLIC Reset
-            Guard.Reset();
+            IF (Guard <> NULL) THEN
+                Guard.Reset();
+            END_IF;
         END_METHOD
 
     END_CLASS

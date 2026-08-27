@@ -11,12 +11,20 @@ NAMESPACE Simatic.Ax.StateFramework
         END_VAR
         
         METHOD PUBLIC Check : BOOL
-            Check := Lhs.Check() AND Rhs.Check();
+            IF (Lhs = NULL) OR (Rhs = NULL) THEN
+                Check := FALSE;
+            ELSE
+                Check := Lhs.Check() AND Rhs.Check();
+            END_IF;
         END_METHOD
 
         METHOD PUBLIC Reset
-            Lhs.Reset();
-            Rhs.Reset();
+            IF (Lhs <> NULL) THEN
+                Lhs.Reset();
+            END_IF;
+            IF (Rhs <> NULL) THEN
+                Rhs.Reset();
+            END_IF;
         END_METHOD
 
     END_CLASS
