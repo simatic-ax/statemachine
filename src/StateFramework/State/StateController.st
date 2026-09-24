@@ -55,7 +55,7 @@ NAMESPACE Simatic.Ax.StateFramework
                 Restart := InitialState;
             ELSE
                 Restart := NULL;
-            END_IF
+            END_IF;
             
         END_METHOD
 
