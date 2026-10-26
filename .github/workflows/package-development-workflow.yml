@@ -54,20 +54,15 @@ jobs:
           immutable: true
 
       - name: Build source code
-        uses: simatic-ax/actions/apax-build@v4
+        uses: simatic-ax/actions/apax-make@v4
         with:
-          apax-build-targets: |
-            llvm
-            1500
-          apax-build-args: |
-            --debug
-            --log Debug
+          log: debug
 
       - name: Test source code
         uses: simatic-ax/actions/apax-test@v4
         with:
           coverage: true
-          loglevel: debug
+          log-level: debug
 
       - name: Check links
         uses: gaurav-nelson/github-action-markdown-link-check@v1
@@ -81,7 +76,7 @@ jobs:
         with:
           name: build-artifacts
           path: |
-            bin/1500 
-            bin/llvm
+            out/Debug/s7 
+            out/Debug/llvm
           retention-days: 90
           if-no-files-found: error

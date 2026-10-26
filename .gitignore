@@ -7,3 +7,4 @@ TestResult
 assets
 /.vs
 /.vscode
+out/
