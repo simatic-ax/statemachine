@@ -46,7 +46,7 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: build-artifacts
-          path: bin
+          path: out/Debug
 
       - name: Version package
         uses: simatic-ax/actions/apax-version@v4
