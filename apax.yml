@@ -25,7 +25,7 @@ installStrategy: strict
 # Dependencies
 devDependencies:
   '@ax/sdk': ^2504.0.0
-  "@simatic-ax/snippetscollection": 1.0.0
+  "@simatic-ax/snippetscollection": 1.1.0
 dependencies:
   "@ax/system-timer": ^10.0.24
 # Files, which will be shipped with the library
